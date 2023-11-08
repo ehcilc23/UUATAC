@@ -1,6 +1,8 @@
 # UU-ATAC Analysis Code
-This repo provides analysis code and data for the manuscript entitled:
-`xxx`
+This repo provides analysis code for the manuscript entitled:
+
+`Mapping the vertebrate chromatin accessibility landscape at single-cell level by UU-ATAC-seq`
+
 
 ## Getting Started
-### Download data
+
