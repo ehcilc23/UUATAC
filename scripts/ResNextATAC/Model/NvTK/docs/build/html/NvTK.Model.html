@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK.Model package &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">NvTK.Model package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-NvTK.Model.BasicModel">NvTK.Model.BasicModel module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Model.ConvModel">NvTK.Model.ConvModel module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Model.Extention">NvTK.Model.Extention module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Model.Publications">NvTK.Model.Publications module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Model.ResNet">NvTK.Model.ResNet module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Model">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>NvTK.Model package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/NvTK.Model.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="nvtk-model-package">
+<h1>NvTK.Model package<a class="headerlink" href="#nvtk-model-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-NvTK.Model.BasicModel">
+<span id="nvtk-model-basicmodel-module"></span><h2>NvTK.Model.BasicModel module<a class="headerlink" href="#module-NvTK.Model.BasicModel" title="Permalink to this headline">¶</a></h2>
+<p>Basic Model in NvTK.
+This module provides</p>
+<ol class="arabic simple">
+<li><cite>BasicModel</cite> class - the general abstract class</li>
+</ol>
+<p>and supporting methods.</p>
+<dl class="class">
+<dt id="NvTK.Model.BasicModel.BasicModel">
+<em class="property">class </em><code class="descclassname">NvTK.Model.BasicModel.</code><code class="descname">BasicModel</code><a class="reference internal" href="_modules/NvTK/Model/BasicModel.html#BasicModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.BasicModel.BasicModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<p>Basic Model class in NvTK.
+Prototype for a sequence-based deep-learning model. 
+BasicModel contains Embedding, Encoder, Decoder, Predictor layers.</p>
+<p>Embedding : embed the sequence into vectors</p>
+<p>Encoder : encode the inputs into feature-maps</p>
+<p>Decoder : decode the encoded inputs (Flattened) into higher feature-maps</p>
+<p>Predictor : mapp the decoded feature-maps into task-specific space 
+and make prediction</p>
+<p>-&gt; Embedding(x)</p>
+<p>-&gt; Encoder(x)</p>
+<p>-&gt; Flatten(x)</p>
+<p>-&gt; Decoder(x)</p>
+<p>-&gt; Predictor(x)</p>
+<dl class="method">
+<dt id="NvTK.Model.BasicModel.BasicModel.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/BasicModel.html#BasicModel.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.BasicModel.BasicModel.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Model.ConvModel">
+<span id="nvtk-model-convmodel-module"></span><h2>NvTK.Model.ConvModel module<a class="headerlink" href="#module-NvTK.Model.ConvModel" title="Permalink to this headline">¶</a></h2>
+<p>Convolutional Models in NvTK.
+This module provides</p>
+<ol class="arabic simple">
+<li><cite>CNN</cite> class - Convolutional Model in NvTK</li>
+<li><cite>CAN</cite> class - Convolutional Attention Model using CBAM</li>
+</ol>
+<dl class="class">
+<dt id="NvTK.Model.ConvModel.CAN">
+<em class="property">class </em><code class="descclassname">NvTK.Model.ConvModel.</code><code class="descname">CAN</code><span class="sig-paren">(</span><em>output_size</em>, <em>out_planes=128</em>, <em>kernel_size=3</em>, <em>in_planes=4</em>, <em>conv_args={'bias': False</em>, <em>'dilation': 1</em>, <em>'groups': 1</em>, <em>'padding': 0</em>, <em>'stride': 1}</em>, <em>bn=True</em>, <em>activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em>activation_args={}</em>, <em>pool=&lt;class 'torch.nn.modules.pooling.AvgPool1d'&gt;</em>, <em>pool_args={'kernel_size': 3}</em>, <em>tasktype='regression'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/ConvModel.html#CAN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.ConvModel.CAN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#NvTK.Model.BasicModel.BasicModel" title="NvTK.Model.BasicModel.BasicModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Model.BasicModel.BasicModel</span></code></a></p>
+<p>Covolution Attention Model in NvTK
+contain Embedding, Encoder(CBAM), Decoder, Predictor</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Model.ConvModel.CNN">
+<em class="property">class </em><code class="descclassname">NvTK.Model.ConvModel.</code><code class="descname">CNN</code><span class="sig-paren">(</span><em>output_size</em>, <em>out_planes=128</em>, <em>kernel_size=3</em>, <em>in_planes=4</em>, <em>conv_args={'bias': True</em>, <em>'dilation': 1</em>, <em>'groups': 1</em>, <em>'padding': 0</em>, <em>'stride': 1}</em>, <em>bn=False</em>, <em>activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em>activation_args={}</em>, <em>pool=&lt;class 'torch.nn.modules.pooling.AvgPool1d'&gt;</em>, <em>pool_args={'kernel_size': 3}</em>, <em>tasktype='regression'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/ConvModel.html#CNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.ConvModel.CNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#NvTK.Model.BasicModel.BasicModel" title="NvTK.Model.BasicModel.BasicModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Model.BasicModel.BasicModel</span></code></a></p>
+<p>Convolutional Model in NvTK.</p>
+<p>contain Embedding, Encoder, Decoder, Predictor</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Model.Extention">
+<span id="nvtk-model-extention-module"></span><h2>NvTK.Model.Extention module<a class="headerlink" href="#module-NvTK.Model.Extention" title="Permalink to this headline">¶</a></h2>
+<p>Extention utilities for loading and instantiating extended modules and models</p>
+<dl class="function">
+<dt id="NvTK.Model.Extention.load_module">
+<code class="descclassname">NvTK.Model.Extention.</code><code class="descname">load_module</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Extention.html#load_module"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Extention.load_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load extended module, link to NvTK, enable import from NvTK.ExtendedModuleName</p>
+<p>This method expects that you pass in the path to a valid Python module FilePath or Dir.
+FilePath: Load a module created based on a Python file path; 
+Dir: where the <cite>__init__.py</cite> file already imports the model class.
+(e.g. <cite>__init__.py</cite> contains the line <cite>from &lt;model_class_file&gt; import &lt;ModelClass&gt;</cite>).</p>
+<p>Example: <cite>load_module(“../pathDir/model_class_file.py”)</cite>
+Then <cite>NvTK.model_class_file.ModelClass(args)</cite> could be used in your code.</p>
+<p>path : str</p>
+<p>NvTK.ExtendedModuleName, None</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Model.Extention.module_from_dir">
+<code class="descclassname">NvTK.Model.Extention.</code><code class="descname">module_from_dir</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Extention.html#module_from_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Extention.module_from_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method expects that you pass in the path to a valid Python module,
+where the <cite>__init__.py</cite> file already imports the model class.
+(e.g. <cite>__init__.py</cite> contains the line <cite>from &lt;model_class_file&gt; import
+&lt;ModelClass&gt;</cite>).</p>
+<dl class="docutils">
+<dt>path <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Path to the Python module containing the model class.</dd>
+</dl>
+<p>The loaded module</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Model.Extention.module_from_file">
+<code class="descclassname">NvTK.Model.Extention.</code><code class="descname">module_from_file</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Extention.html#module_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Extention.module_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a module created based on a Python file path.</p>
+<dl class="docutils">
+<dt>path <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Path to the model architecture file.</dd>
+</dl>
+<p>The loaded module</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Model.Publications">
+<span id="nvtk-model-publications-module"></span><h2>NvTK.Model.Publications module<a class="headerlink" href="#module-NvTK.Model.Publications" title="Permalink to this headline">¶</a></h2>
+<p>Reimplement of Publicated Model Archiectures applicable in NvTK.
+This module provides</p>
+<ol class="arabic simple">
+<li><cite>NINCNN</cite> - Network in Network CNN model Archiecture</li>
+<li><cite>DeepSEA</cite> - DeepSEA architecture (Zhou &amp; Troyanskaya, 2015).</li>
+<li><cite>Beluga</cite> - DeepSEA architecture used in Expecto (Zhou &amp; Troyanskaya, 2019).</li>
+<li><cite>DanQ</cite> - DanQ architecture (Quang &amp; Xie, 2016).</li>
+<li><cite>Basset</cite> - Basset architecture (Kelley, 2016).</li>
+</ol>
+<p>and supporting methods.</p>
+<dl class="class">
+<dt id="NvTK.Model.Publications.NINCNN">
+<em class="property">class </em><code class="descclassname">NvTK.Model.Publications.</code><code class="descname">NINCNN</code><span class="sig-paren">(</span><em>sequence_length</em>, <em>n_genomic_features</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#NINCNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.NINCNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<dl class="docutils">
+<dt>&#64;misc{<a class="reference external" href="https://doi.org/10.48550/arxiv.1312.4400">https://doi.org/10.48550/arxiv.1312.4400</a>,</dt>
+<dd>doi = {10.48550/ARXIV.1312.4400},
+url = {<a class="reference external" href="https://arxiv.org/abs/1312.4400">https://arxiv.org/abs/1312.4400</a>},
+author = {Lin, Min and Chen, Qiang and Yan, Shuicheng},
+keywords = {Neural and Evolutionary Computing (cs.NE), Computer Vision and Pattern Recognition (cs.CV), Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
+title = {Network In Network},
+publisher = {arXiv},
+year = {2013},
+copyright = {arXiv.org perpetual, non-exclusive license}</dd>
+</dl>
+<p>}</p>
+<dl class="method">
+<dt id="NvTK.Model.Publications.NINCNN.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#NINCNN.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.NINCNN.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Model.Publications.DeepSEA">
+<em class="property">class </em><code class="descclassname">NvTK.Model.Publications.</code><code class="descname">DeepSEA</code><span class="sig-paren">(</span><em>sequence_length</em>, <em>n_genomic_features</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#DeepSEA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.DeepSEA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<p>DeepSEA architecture (Zhou &amp; Troyanskaya, 2015).</p>
+<dl class="method">
+<dt id="NvTK.Model.Publications.DeepSEA.criterion">
+<code class="descname">criterion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#DeepSEA.criterion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.DeepSEA.criterion" title="Permalink to this definition">¶</a></dt>
+<dd><p>The criterion the model aims to minimize.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Model.Publications.DeepSEA.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#DeepSEA.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.DeepSEA.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forward propagation of a batch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Model.Publications.DeepSEA.get_optimizer">
+<code class="descname">get_optimizer</code><span class="sig-paren">(</span><em>lr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#DeepSEA.get_optimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.DeepSEA.get_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optimizer and the parameters with which to initialize the optimizer.
+At a later time, we initialize the optimizer by also passing in the model
+parameters (<cite>model.parameters()</cite>). We cannot initialize the optimizer
+until the model has been initialized.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Model.Publications.Beluga">
+<em class="property">class </em><code class="descclassname">NvTK.Model.Publications.</code><code class="descname">Beluga</code><span class="sig-paren">(</span><em>sequence_length</em>, <em>n_genomic_features</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#Beluga"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.Beluga" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<p>DeepSEA architecture used in Expecto (Zhou &amp; Troyanskaya, 2019).</p>
+<dl class="method">
+<dt id="NvTK.Model.Publications.Beluga.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#Beluga.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.Beluga.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Model.Publications.DanQ">
+<em class="property">class </em><code class="descclassname">NvTK.Model.Publications.</code><code class="descname">DanQ</code><span class="sig-paren">(</span><em>sequence_length</em>, <em>n_genomic_features</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#DanQ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.DanQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>DanQ architecture (Quang &amp; Xie, 2016).</p>
+<dl class="method">
+<dt id="NvTK.Model.Publications.DanQ.criterion">
+<code class="descname">criterion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#DanQ.criterion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.DanQ.criterion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Model.Publications.DanQ.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#DanQ.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.DanQ.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forward propagation of a batch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Model.Publications.DanQ.get_optimizer">
+<code class="descname">get_optimizer</code><span class="sig-paren">(</span><em>lr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#DanQ.get_optimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.DanQ.get_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Model.Publications.Basset">
+<em class="property">class </em><code class="descclassname">NvTK.Model.Publications.</code><code class="descname">Basset</code><span class="sig-paren">(</span><em>sequence_length</em>, <em>n_genomic_features</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#Basset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.Basset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<p>Basset architecture (Kelley, 2016).
+Deep convolutional neural networks for DNA sequence analysis.
+The architecture and optimization parameters for the DNaseI-seq compendium analyzed in the paper.</p>
+<dl class="method">
+<dt id="NvTK.Model.Publications.Basset.architecture">
+<code class="descname">architecture</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#Basset.architecture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.Basset.architecture" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Model.Publications.Basset.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/Publications.html#Basset.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.Publications.Basset.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Model.ResNet">
+<span id="nvtk-model-resnet-module"></span><h2>NvTK.Model.ResNet module<a class="headerlink" href="#module-NvTK.Model.ResNet" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="NvTK.Model.ResNet.cbam_resnet101">
+<code class="descclassname">NvTK.Model.ResNet.</code><code class="descname">cbam_resnet101</code><span class="sig-paren">(</span><em>n_features=1000</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/ResNet.html#cbam_resnet101"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.ResNet.cbam_resnet101" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Model.ResNet.cbam_resnet18">
+<code class="descclassname">NvTK.Model.ResNet.</code><code class="descname">cbam_resnet18</code><span class="sig-paren">(</span><em>n_features=1000</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/ResNet.html#cbam_resnet18"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.ResNet.cbam_resnet18" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Model.ResNet.cbam_resnet34">
+<code class="descclassname">NvTK.Model.ResNet.</code><code class="descname">cbam_resnet34</code><span class="sig-paren">(</span><em>n_features=1000</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/ResNet.html#cbam_resnet34"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.ResNet.cbam_resnet34" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Model.ResNet.cbam_resnet50">
+<code class="descclassname">NvTK.Model.ResNet.</code><code class="descname">cbam_resnet50</code><span class="sig-paren">(</span><em>n_features=1000</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/ResNet.html#cbam_resnet50"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.ResNet.cbam_resnet50" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Model.ResNet.resnet101">
+<code class="descclassname">NvTK.Model.ResNet.</code><code class="descname">resnet101</code><span class="sig-paren">(</span><em>n_features=1000</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/ResNet.html#resnet101"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.ResNet.resnet101" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Model.ResNet.resnet18">
+<code class="descclassname">NvTK.Model.ResNet.</code><code class="descname">resnet18</code><span class="sig-paren">(</span><em>n_features=1000</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/ResNet.html#resnet18"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.ResNet.resnet18" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Model.ResNet.resnet34">
+<code class="descclassname">NvTK.Model.ResNet.</code><code class="descname">resnet34</code><span class="sig-paren">(</span><em>n_features=1000</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/ResNet.html#resnet34"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.ResNet.resnet34" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Model.ResNet.resnet50">
+<code class="descclassname">NvTK.Model.ResNet.</code><code class="descname">resnet50</code><span class="sig-paren">(</span><em>n_features=1000</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Model/ResNet.html#resnet50"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Model.ResNet.resnet50" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Model">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-NvTK.Model" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

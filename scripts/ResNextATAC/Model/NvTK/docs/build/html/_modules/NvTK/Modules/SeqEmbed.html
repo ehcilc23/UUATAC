@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK.Modules.SeqEmbed &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../../NvTK.html">NvTK</a> &raquo;</li>
+      <li>NvTK.Modules.SeqEmbed</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NvTK.Modules.SeqEmbed</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Sequence Embedding module in NvTK.</span>
+<span class="sd">This module provides </span>
+
+<span class="sd">1.  `BasicConvEmbed` class - Basic Convolutional Embedding Module (1d)</span>
+
+<span class="sd">2.  `RevCompConvEmbed` class - Convolutional Embedding Module considering Reverse-Complement Sequence </span>
+
+<span class="sd">3.  `CharConvModule` class - Wide and shallow Charactor-level Convolution Module</span>
+
+<span class="sd">and supporting methods.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Code:   jiaqili@zju.edu</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BasicConvEmbed&quot;</span><span class="p">,</span> <span class="s2">&quot;RevComp&quot;</span><span class="p">,</span> <span class="s2">&quot;RevCompConvEmbed&quot;</span><span class="p">,</span> <span class="s2">&quot;CharConvModule&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="BasicConvEmbed"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.SeqEmbed.BasicConvEmbed">[docs]</a><span class="k">class</span> <span class="nc">BasicConvEmbed</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Basic Convolutional Embedding Module in NvTK.</span>
+<span class="sd">    Embed Sequence using Convolution Layer.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_planes : int</span>
+<span class="sd">        Number of input channels</span>
+<span class="sd">    out_planes : int</span>
+<span class="sd">        Number of output channels produced by the convolution</span>
+<span class="sd">    kernel_size : int, optional</span>
+<span class="sd">        Size of the convolving kernel</span>
+<span class="sd">    conv_args : dict, optional</span>
+<span class="sd">        Other convolutional args, Default is dict().</span>
+<span class="sd">        Will be pass to `torch.nn.Conv1d(**conv_args)`</span>
+<span class="sd">        (e.g. `conv_args={&#39;dilation&#39;:1}`)</span>
+<span class="sd">    bn : bool, optional</span>
+<span class="sd">        Whether to use BatchNorm1d, Default is True.</span>
+<span class="sd">    activation : nn.Module, optional</span>
+<span class="sd">        Activation Module, Default is nn.ReLU.</span>
+<span class="sd">    activation_args : dict, optional</span>
+<span class="sd">        Other activation args, Default is dict().</span>
+<span class="sd">        Will be pass to `activation(**activation_args)`</span>
+<span class="sd">        (e.g. `activation=nn.LeakyReLU, activation_args={&#39;p&#39;:0.2}`)</span>
+<span class="sd">    dropout : bool, optional</span>
+<span class="sd">        Whether to use Dropout, Default is True.</span>
+<span class="sd">    dropout_args : dict, optional</span>
+<span class="sd">        Dropout args, Default is {&#39;p&#39;:0.5}.</span>
+<span class="sd">        Will be pass to `nn.Dropout(**dropout_args)` if dropout</span>
+<span class="sd">        (e.g. `dropout=True, dropout_args={&#39;p&#39;:0.5}`)</span>
+<span class="sd">    pool : nn.Module, optional</span>
+<span class="sd">        Pool Module (1d), Default is nn.AvgPool1d.</span>
+<span class="sd">    pool_args : dict, optional</span>
+<span class="sd">        Other pool args, Default is {&#39;kernel_size&#39;: 3}.</span>
+<span class="sd">        Will be pass to `pool(**pool_args)`</span>
+<span class="sd">        (e.g. `pool=nn.AvgPool1d, pool_args={&#39;kernel_size&#39;: 3}`)</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_channels : int</span>
+
+<span class="sd">    out_channels : int</span>
+
+<span class="sd">    conv : nn.Conv1d</span>
+<span class="sd">        The convolutional neural network component of the model.</span>
+<span class="sd">    bn : nn.BatchNorm1d</span>
+<span class="sd">        The Batch Normalization </span>
+<span class="sd">    activation : nn.Module</span>
+<span class="sd">        The activation Module</span>
+<span class="sd">    dropout : nn.Dropout</span>
+<span class="sd">        The Dropout Module</span>
+<span class="sd">    pool : nn.Module</span>
+<span class="sd">        The pool Module</span>
+
+<span class="sd">    Tensor flows</span>
+<span class="sd">    ----------</span>
+<span class="sd">    -&gt; conv(x)</span>
+
+<span class="sd">    -&gt; bn(x) if bn</span>
+<span class="sd">    </span>
+<span class="sd">    -&gt; activation(x) if activation</span>
+<span class="sd">    </span>
+<span class="sd">    -&gt; dropout(x) if dropout</span>
+<span class="sd">    </span>
+<span class="sd">    -&gt; pool(x) if pool</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_planes</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">in_planes</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
+                    <span class="n">conv_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;stride&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;padding&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;dilation&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;groups&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> 
+                    <span class="n">bn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">activation_args</span><span class="o">=</span><span class="p">{},</span> 
+                    <span class="n">pool</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">AvgPool1d</span><span class="p">,</span> <span class="n">pool_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;kernel_size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">out_planes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_planes</span><span class="p">,</span> <span class="n">out_planes</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span> 
+                        <span class="o">**</span><span class="n">conv_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="n">out_planes</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">affine</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">bn</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="o">**</span><span class="n">activation_args</span><span class="p">)</span> <span class="k">if</span> <span class="n">activation</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">pool</span><span class="p">(</span><span class="o">**</span><span class="n">pool_args</span><span class="p">)</span> <span class="k">if</span> <span class="n">pool</span> <span class="k">else</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="BasicConvEmbed.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.SeqEmbed.BasicConvEmbed.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div></div>
+
+
+<div class="viewcode-block" id="RevComp"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.SeqEmbed.RevComp">[docs]</a><span class="k">class</span> <span class="nc">RevComp</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reverse Complement of onehot Sequence&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="RevComp.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.SeqEmbed.RevComp.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">flip</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span class="c1"># (batchsize, 4, seqlen)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">flip</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># (batchsize, 4, 1, seqlen)</span></div></div>
+
+
+<div class="viewcode-block" id="RevCompConvEmbed"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.SeqEmbed.RevCompConvEmbed">[docs]</a><span class="k">class</span> <span class="nc">RevCompConvEmbed</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Reverse Complement Convolutional Embedding Module in NvTK.</span>
+<span class="sd">    Embed Sequence and Reverse Complement Sequence using Convolution Layer.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_planes : int</span>
+<span class="sd">        Number of input channels</span>
+<span class="sd">    out_planes : int</span>
+<span class="sd">        Number of output channels produced by the convolution</span>
+<span class="sd">    kernel_size : int, optional</span>
+<span class="sd">        Size of the convolving kernel</span>
+<span class="sd">    conv_args : dict, optional</span>
+<span class="sd">        Other convolutional args, Default is dict().</span>
+<span class="sd">        Will be pass to `torch.nn.Conv1d(**conv_args)`</span>
+<span class="sd">        (e.g. `conv_args={&#39;dilation&#39;:1}`)</span>
+<span class="sd">    bn : bool, optional</span>
+<span class="sd">        Whether to use BatchNorm1d, Default is True.</span>
+<span class="sd">    activation : nn.Module, optional</span>
+<span class="sd">        Activation Module, Default is nn.ReLU.</span>
+<span class="sd">    activation_args : dict, optional</span>
+<span class="sd">        Other activation args, Default is dict().</span>
+<span class="sd">        Will be pass to `activation(**activation_args)`</span>
+<span class="sd">        (e.g. `activation=nn.LeakyReLU, activation_args={&#39;p&#39;:0.2}`)</span>
+<span class="sd">    dropout : bool, optional</span>
+<span class="sd">        Whether to use Dropout, Default is True.</span>
+<span class="sd">    dropout_args : dict, optional</span>
+<span class="sd">        Dropout args, Default is {&#39;p&#39;:0.5}.</span>
+<span class="sd">        Will be pass to `nn.Dropout(**dropout_args)` if dropout</span>
+<span class="sd">        (e.g. `dropout=True, dropout_args={&#39;p&#39;:0.5}`)</span>
+<span class="sd">    pool : nn.Module, optional</span>
+<span class="sd">        Pool Module (1d), Default is nn.AvgPool1d.</span>
+<span class="sd">    pool_args : dict, optional</span>
+<span class="sd">        Other pool args, Default is {&#39;kernel_size&#39;: 3}.</span>
+<span class="sd">        Will be pass to `pool(**pool_args)`</span>
+<span class="sd">        (e.g. `pool=nn.AvgPool1d, pool_args={&#39;kernel_size&#39;: 3}`)</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    RevCompConvEmbed : BasicConvEmbed</span>
+<span class="sd">        Basic Convolutional Embedding Module in NvTK</span>
+<span class="sd">    RevComp : nn.Module</span>
+<span class="sd">        Reverse Complement of onehot Sequence</span>
+
+<span class="sd">    Tensor flows</span>
+<span class="sd">    ----------</span>
+<span class="sd">    -&gt; x1 = RevComp(x) </span>
+
+<span class="sd">    -&gt; x1 = RevCompConvEmbed(x1)</span>
+<span class="sd">    </span>
+<span class="sd">    -&gt; x2 = RevCompConvEmbed(x)</span>
+<span class="sd">    </span>
+<span class="sd">    -&gt; x1 + x2</span>
+<span class="sd">        </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_planes</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">in_planes</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
+                    <span class="n">conv_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;stride&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;padding&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;dilation&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;groups&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> 
+                    <span class="n">bn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">activation_args</span><span class="o">=</span><span class="p">{},</span> 
+                    <span class="n">pool</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">AvgPool1d</span><span class="p">,</span> <span class="n">pool_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;kernel_size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RevCompConvEmbed</span> <span class="o">=</span> <span class="n">BasicConvEmbed</span><span class="p">(</span><span class="n">out_planes</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span> <span class="n">in_planes</span><span class="o">=</span><span class="n">in_planes</span><span class="p">,</span> 
+                    <span class="n">conv_args</span><span class="o">=</span><span class="n">conv_args</span><span class="p">,</span> 
+                    <span class="n">bn</span><span class="o">=</span><span class="n">bn</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span> <span class="n">activation_args</span><span class="o">=</span><span class="n">activation_args</span><span class="p">,</span> 
+                    <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">,</span> <span class="n">pool_args</span><span class="o">=</span><span class="n">pool_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RevComp</span> <span class="o">=</span> <span class="n">RevComp</span><span class="p">()</span>
+
+<div class="viewcode-block" id="RevCompConvEmbed.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.SeqEmbed.RevCompConvEmbed.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">fmap1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RevCompConvEmbed</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">fmap2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RevCompConvEmbed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RevComp</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">fmap1</span> <span class="o">+</span> <span class="n">fmap2</span></div></div>
+
+
+<div class="viewcode-block" id="CharConvModule"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.SeqEmbed.CharConvModule">[docs]</a><span class="k">class</span> <span class="nc">CharConvModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Embed Sequence using wide and shallow CharConvolution Layer.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numFiltersConv1</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">filterLenConv1</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                        <span class="n">numFiltersConv2</span><span class="o">=</span><span class="mi">44</span><span class="p">,</span> <span class="n">filterLenConv2</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                        <span class="n">numFiltersConv3</span><span class="o">=</span><span class="mi">44</span><span class="p">,</span> <span class="n">filterLenConv3</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+                        <span class="n">bn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">activation_args</span><span class="o">=</span><span class="p">{},</span> 
+                        <span class="n">pool</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">AvgPool1d</span><span class="p">,</span> <span class="n">pool_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;kernel_size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}):</span>
+        
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">numFiltersConv1</span><span class="p">,</span> 
+                                <span class="n">kernel_size</span><span class="o">=</span><span class="n">filterLenConv1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="n">filterLenConv1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">numFiltersConv2</span><span class="p">,</span> 
+                                <span class="n">kernel_size</span><span class="o">=</span><span class="n">filterLenConv2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="n">filterLenConv2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">numFiltersConv3</span><span class="p">,</span> 
+                                <span class="n">kernel_size</span><span class="o">=</span><span class="n">filterLenConv3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="n">filterLenConv3</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">out_planes</span> <span class="o">=</span> <span class="n">numFiltersConv1</span> <span class="o">+</span> <span class="n">numFiltersConv2</span> <span class="o">+</span> <span class="n">numFiltersConv3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="n">out_planes</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">affine</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">bn</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="o">**</span><span class="n">activation_args</span><span class="p">)</span> <span class="k">if</span> <span class="n">activation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">pool</span><span class="p">(</span><span class="o">**</span><span class="n">pool_args</span><span class="p">)</span> <span class="k">if</span> <span class="n">pool</span> <span class="k">else</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="CharConvModule.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.SeqEmbed.CharConvModule.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="n">out1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">out1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        
+        <span class="n">out2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">out2</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="n">out3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">out3</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        
+        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">out1</span><span class="p">,</span> <span class="n">out2</span><span class="p">,</span> <span class="n">out3</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

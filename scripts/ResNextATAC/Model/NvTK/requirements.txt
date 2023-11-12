@@ -1,0 +1,17 @@
+numpy
+pandas>=0.21
+matplotlib==3.0.*
+# h5py > 2.10 may returns b'strings' reading h5file
+h5py=2.10.0
+tqdm
+scikit-learn>=0.21.2
+# torch >=1.10.1 support tensorboard, and ModifyOutputHook
+torch>=1.10.1
+tensorboard=2.7.0
+captum=0.5.0
+networkx
+# higher version of scipy do not support resize
+pillow
+
+# optional
+# ray[tune]=1.12.0

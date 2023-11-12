@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK.Trainer &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+          <li><a href="../NvTK.html">NvTK</a> &raquo;</li>
+      <li>NvTK.Trainer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NvTK.Trainer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">shutil</span><span class="o">,</span> <span class="nn">logging</span><span class="o">,</span> <span class="nn">pickle</span><span class="o">,</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">.Evaluator</span> <span class="kn">import</span> <span class="n">calculate_correlation</span><span class="p">,</span> <span class="n">calculate_roc</span>
+
+<div class="viewcode-block" id="Trainer"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer">[docs]</a><span class="k">class</span> <span class="nc">Trainer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Model Trainer</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">tasktype</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span>
+                    <span class="n">metric_sample</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">item_sample</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                    <span class="n">resume</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">resume_dirs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">use_tensorbord</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tensorbord_args</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span> <span class="o">=</span> <span class="n">criterion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patience</span> <span class="o">=</span> <span class="n">patience</span>
+
+        <span class="c1"># task related</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred_prob</span> <span class="o">=</span> <span class="n">tasktype</span> <span class="o">!=</span> <span class="s2">&quot;regression&quot;</span>
+        <span class="c1"># sample tasks for calculate metric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric_sample</span> <span class="o">=</span> <span class="n">metric_sample</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_sample</span> <span class="o">=</span> <span class="n">item_sample</span>
+
+        <span class="c1"># Trainer will maintain logs information</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;train_batch_loss_list&quot;</span><span class="p">:[],</span> 
+            <span class="s2">&quot;val_batch_loss_list&quot;</span><span class="p">:[],</span> 
+            <span class="s2">&quot;test_batch_loss_list&quot;</span><span class="p">:[],</span>
+
+            <span class="s2">&quot;train_loss_list&quot;</span><span class="p">:[],</span> 
+            <span class="s2">&quot;val_loss_list&quot;</span><span class="p">:[],</span> 
+            <span class="s2">&quot;test_loss_list&quot;</span><span class="p">:[],</span>
+
+            <span class="s2">&quot;val_metric_list&quot;</span><span class="p">:[],</span> 
+            <span class="s2">&quot;test_metric_list&quot;</span><span class="p">:[],</span> 
+            <span class="s2">&quot;train_metric_list&quot;</span><span class="p">:[],</span>
+            <span class="s2">&quot;lrs&quot;</span><span class="p">:[],</span>
+
+            <span class="s2">&quot;best_val_loss&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+            <span class="s2">&quot;best_val_r&quot;</span><span class="p">:</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+            <span class="s2">&quot;best_val_epoch&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="c1"># TODO resume model training</span>
+        <span class="k">if</span> <span class="n">resume</span> <span class="ow">and</span> <span class="n">resume_dirs</span><span class="p">:</span>
+            <span class="k">pass</span>
+        
+        <span class="c1"># TODO capture error when loading tensorbord in lower version</span>
+        <span class="k">if</span> <span class="n">use_tensorbord</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tensorbord</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">SummaryWriter</span><span class="p">(</span><span class="o">**</span><span class="n">tensorbord_args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tensorbord</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Trainer.train_until_converge"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer.train_until_converge">[docs]</a>    <span class="k">def</span> <span class="nf">train_until_converge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">validate_loader</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">EPOCH</span><span class="p">,</span> <span class="n">resume</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose_step</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="c1"># graph</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tensorbord</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_graph</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;tensorbord cannot added graph&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">EPOCH</span><span class="p">):</span>
+            <span class="c1"># train</span>
+            <span class="n">train_batch_loss</span><span class="p">,</span> <span class="n">train_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_per_epoch</span><span class="p">(</span><span class="n">train_loader</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">verbose_step</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+            <span class="c1"># train metrics</span>
+            <span class="n">train_batch_loss</span><span class="p">,</span> <span class="n">train_loss</span><span class="p">,</span> <span class="n">train_pred_prob</span><span class="p">,</span> <span class="n">train_target_prob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_loader</span><span class="p">)</span>
+            <span class="n">train_metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">train_pred_prob</span><span class="p">,</span> <span class="n">train_target_prob</span><span class="p">)</span>
+
+            <span class="c1"># validation metrics</span>
+            <span class="n">val_batch_loss</span><span class="p">,</span> <span class="n">val_loss</span><span class="p">,</span> <span class="n">val_pred_prob</span><span class="p">,</span> <span class="n">val_target_prob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">validate_loader</span><span class="p">)</span>
+            <span class="n">val_metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">val_pred_prob</span><span class="p">,</span> <span class="n">val_target_prob</span><span class="p">)</span>
+
+            <span class="c1"># test metrics</span>
+            <span class="n">test_batch_loss</span><span class="p">,</span> <span class="n">test_loss</span><span class="p">,</span> <span class="n">test_pred_prob</span><span class="p">,</span> <span class="n">test_target_prob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_loader</span><span class="p">)</span>
+            <span class="n">test_metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_pred_prob</span><span class="p">,</span> <span class="n">test_target_prob</span><span class="p">)</span>
+
+            <span class="c1"># lr_scheduler</span>
+            <span class="n">_lr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;lr&#39;</span><span class="p">]</span>
+            <span class="c1"># lr_scheduler.step(val_loss)</span>
+
+            <span class="c1"># logs</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Train</span><span class="se">\t</span><span class="s2"> Accuracy: </span><span class="si">%.4f</span><span class="se">\t</span><span class="s2"> Loss: </span><span class="si">%.4f</span><span class="se">\t\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">train_metric</span><span class="p">,</span> <span class="n">train_loss</span><span class="p">))</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Eval</span><span class="se">\t</span><span class="s2"> Accuracy: </span><span class="si">%.4f</span><span class="se">\t</span><span class="s2"> Loss: </span><span class="si">%.4f</span><span class="se">\t\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val_metric</span><span class="p">,</span> <span class="n">val_loss</span><span class="p">))</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_batch_loss_list&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">train_batch_loss</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_batch_loss_list&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">val_batch_loss</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_batch_loss_list&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">test_batch_loss</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_loss_list&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_loss</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_loss_list&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val_loss</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_loss_list&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_loss</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_metric_list&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_metric</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_metric_list&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val_metric</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_metric_list&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_metric</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;lrs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_lr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_trainer_log</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tensorbord</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Loss/train&#39;</span><span class="p">,</span> <span class="n">train_loss</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Loss/test&#39;</span><span class="p">,</span> <span class="n">test_loss</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Accuracy/train&#39;</span><span class="p">,</span> <span class="n">train_metric</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Accuracy/test&#39;</span><span class="p">,</span> <span class="n">test_metric</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_histogram</span><span class="p">(</span><span class="s1">&#39;Embedding.conv.bias&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">Embedding</span><span class="o">.</span><span class="n">conv</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_histogram</span><span class="p">(</span><span class="s1">&#39;Embedding.conv.weight&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">Embedding</span><span class="o">.</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="c1"># update best</span>
+            <span class="k">if</span> <span class="n">val_loss</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;best_val_loss&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">val_metric</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;best_val_r&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;best_val_loss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_loss</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;best_val_r&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_metric</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;best_val_epoch&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch</span>
+
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Eval</span><span class="se">\t</span><span class="s2"> Best Eval Accuracy: </span><span class="si">%.4f</span><span class="se">\t</span><span class="s2"> Loss: </span><span class="si">%.4f</span><span class="se">\t</span><span class="s2"> at Epoch: </span><span class="si">%d</span><span class="se">\t</span><span class="s2"> lr: </span><span class="si">%.8f</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val_metric</span><span class="p">,</span> <span class="n">val_loss</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">_lr</span><span class="p">))</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Eval</span><span class="se">\t</span><span class="s2"> Test Accuracy: </span><span class="si">%.4f</span><span class="se">\t</span><span class="s2"> Loss: </span><span class="si">%.4f</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">test_metric</span><span class="p">,</span> <span class="n">test_loss</span><span class="p">))</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">save_checkpoint</span><span class="p">(</span><span class="n">best</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># or checkpoint</span>
+            <span class="k">elif</span> <span class="n">epoch</span> <span class="o">%</span> <span class="mi">20</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save_checkpoint</span><span class="p">()</span>
+
+            <span class="c1"># early stop</span>
+            <span class="k">if</span> <span class="n">epoch</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;best_val_epoch&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">patience</span><span class="p">:</span> <span class="c1">#patience_epoch:</span>
+                <span class="k">break</span>
+        
+        <span class="c1"># final</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;./Log/best_model@&quot;</span> <span class="o">+</span> <span class="s1">&#39;%m</span><span class="si">%d</span><span class="s1">_%H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="s2">&quot;./Log/best_model.pth&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="o">+</span><span class="s2">&quot;.params.pth&quot;</span><span class="p">)</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="o">+</span><span class="s2">&quot;.chekc_train_log.p&quot;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">))</span>
+
+        <span class="c1"># final logs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_trainer_log</span><span class="p">(</span><span class="n">final</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Best Val Loss</span><span class="se">\t</span><span class="si">%.8f</span><span class="se">\t</span><span class="s2">@epoch</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;best_val_loss&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;best_val_epoch&quot;</span><span class="p">]))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Best Val Metric</span><span class="se">\t</span><span class="si">%.8f</span><span class="se">\t</span><span class="s2">@epoch</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;best_val_r&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;best_val_epoch&quot;</span><span class="p">]))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Best Test Metric</span><span class="se">\t</span><span class="si">%.8f</span><span class="se">\t</span><span class="s2">@epoch</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_metric_list&#39;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_metric_list&#39;</span><span class="p">])))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Best Test Loss</span><span class="se">\t</span><span class="si">%.8f</span><span class="se">\t</span><span class="s2">@epoch</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_loss_list&#39;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_loss_list&#39;</span><span class="p">])))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_best_model</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Trainer.train_per_epoch"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer.train_per_epoch">[docs]</a>    <span class="k">def</span> <span class="nf">train_per_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">verbose_step</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="c1"># train one epoch</span>
+        <span class="n">batch_losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_batch</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">batch_idx</span> <span class="o">%</span> <span class="n">verbose_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Train Epoch: </span><span class="si">{}</span><span class="s1"> [</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1"> (</span><span class="si">{:.0f}</span><span class="s1">%)]</span><span class="se">\t</span><span class="s1">Loss: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">epoch</span><span class="p">,</span> <span class="n">batch_idx</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">),</span>
+                    <span class="mf">100.</span> <span class="o">*</span> <span class="n">batch_idx</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="p">),</span> <span class="n">loss</span><span class="p">))</span>
+            
+            <span class="n">batch_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+            <span class="n">average_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">batch_losses</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">batch_losses</span><span class="p">,</span> <span class="n">average_loss</span></div>
+    
+<div class="viewcode-block" id="Trainer.train_batch"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer.train_batch">[docs]</a>    <span class="k">def</span> <span class="nf">train_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">target</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">loss</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Trainer.predict"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">):</span>
+        <span class="n">batch_losses</span><span class="p">,</span> <span class="n">all_predictions</span><span class="p">,</span> <span class="n">all_targets</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
+                <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">targets</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+                <span class="n">test_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
+                <span class="n">batch_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_loss</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+                <span class="n">all_predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+                <span class="n">all_targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+        <span class="n">average_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">batch_losses</span><span class="p">)</span>
+        <span class="n">all_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">all_predictions</span><span class="p">)</span>
+        <span class="n">all_targets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">all_targets</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">batch_losses</span><span class="p">,</span> <span class="n">average_loss</span><span class="p">,</span> <span class="n">all_predictions</span><span class="p">,</span> <span class="n">all_targets</span></div>
+
+<div class="viewcode-block" id="Trainer.evaluate"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predict_prob</span><span class="p">,</span> <span class="n">target_prob</span><span class="p">,</span> <span class="n">sample_tasks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sample_items</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">item_size</span><span class="p">,</span> <span class="n">output_size</span> <span class="o">=</span> <span class="n">target_prob</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_sample</span> <span class="o">&lt;</span> <span class="n">output_size</span> <span class="ow">and</span> <span class="n">sample_tasks</span><span class="p">:</span>
+            <span class="n">metric_sample_idx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">output_size</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_sample</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;sampled </span><span class="si">%d</span><span class="s2"> tasks for metric&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_sample</span><span class="p">)</span>
+            <span class="n">target_prob</span> <span class="o">=</span> <span class="n">target_prob</span><span class="p">[:,</span> <span class="n">metric_sample_idx</span><span class="p">]</span>
+            <span class="n">predict_prob</span> <span class="o">=</span> <span class="n">predict_prob</span><span class="p">[:,</span> <span class="n">metric_sample_idx</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_sample</span> <span class="o">&lt;</span> <span class="n">item_size</span> <span class="ow">and</span> <span class="n">sample_items</span><span class="p">:</span>
+            <span class="n">item_sample_idx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">item_size</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_sample</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;sampled </span><span class="si">%d</span><span class="s2"> items for metric&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_sample</span><span class="p">)</span>
+            <span class="n">target_prob</span> <span class="o">=</span> <span class="n">target_prob</span><span class="p">[</span><span class="n">item_sample_idx</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">predict_prob</span> <span class="o">=</span> <span class="n">predict_prob</span><span class="p">[</span><span class="n">item_sample_idx</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_prob</span><span class="p">:</span>
+            <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">roc_auc</span> <span class="o">=</span> <span class="n">calculate_roc</span><span class="p">(</span><span class="n">target_prob</span><span class="p">,</span> <span class="n">predict_prob</span><span class="p">)</span>
+            <span class="n">roc_l</span> <span class="o">=</span> <span class="p">[</span><span class="n">roc_auc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">roc_auc</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">roc_auc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="s2">&quot;micro&quot;</span><span class="p">]]</span>
+            <span class="n">metric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">roc_l</span><span class="p">)</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">correlation</span><span class="p">,</span> <span class="n">pvalue</span> <span class="o">=</span> <span class="n">calculate_correlation</span><span class="p">(</span><span class="n">target_prob</span><span class="p">,</span> <span class="n">predict_prob</span><span class="p">)</span>
+            <span class="n">correlation_l</span> <span class="o">=</span> <span class="p">[</span><span class="n">correlation</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">correlation</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="s2">&quot;micro&quot;</span><span class="p">]]</span> <span class="c1"># dict keys ordered by default in py3.7+</span>
+            <span class="n">metric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">correlation_l</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">metric</span></div>
+
+<div class="viewcode-block" id="Trainer.add_graph"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer.add_graph">[docs]</a>    <span class="k">def</span> <span class="nf">add_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_graph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Trainer.load_best_model"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer.load_best_model">[docs]</a>    <span class="k">def</span> <span class="nf">load_best_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="s2">&quot;./Log/best_model.pth&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span></div>
+
+<div class="viewcode-block" id="Trainer.get_current_model"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer.get_current_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span></div>
+
+<div class="viewcode-block" id="Trainer.save_checkpoint"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer.save_checkpoint">[docs]</a>    <span class="k">def</span> <span class="nf">save_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">best</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;./Log&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;./Log/chekc_model.pth&quot;</span><span class="p">)</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;./Log/chekc_model.p&quot;</span><span class="p">)</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;./Log/chekc_train_log.p&quot;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">best</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;./Log/best_model.pth&quot;</span><span class="p">)</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;./Log/best_model.p&quot;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Trainer.show_trainer_log"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.Trainer.show_trainer_log">[docs]</a>    <span class="k">def</span> <span class="nf">show_trainer_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">final</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_loss_list&#39;</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_metric_list&#39;</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_loss_list&#39;</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_metric_list&#39;</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_loss_list&#39;</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_metric_list&#39;</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;lrs&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_logs.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">loss_train</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_loss_list&#39;</span><span class="p">],</span> 
+                    <span class="n">loss_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_loss_list&#39;</span><span class="p">],</span> 
+                    <span class="n">loss_test</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_loss_list&#39;</span><span class="p">],</span> 
+                    <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_logs_loss.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">loss_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_batch_loss_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_batch_loss_val.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">loss_test</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_batch_loss_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_batch_loss_test.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">loss_train</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_batch_loss_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_batch_loss_train.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">loss_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_loss_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_loss_val.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">loss_test</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_loss_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_loss_test.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">loss_train</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_loss_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_loss_train.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">acc_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_metric_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_acc_train.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">acc_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_metric_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_acc_val.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">acc_test</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_metric_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_acc_test.pdf&#39;</span><span class="p">)</span>
+        <span class="n">show_train_log</span><span class="p">(</span><span class="n">lrs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;lrs&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;current_lrs.pdf&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">final</span><span class="p">:</span>
+            <span class="n">show_train_log</span><span class="p">(</span><span class="n">loss_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_loss_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;final_loss_val.pdf&#39;</span><span class="p">)</span>
+            <span class="n">show_train_log</span><span class="p">(</span><span class="n">loss_train</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_loss_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;final_loss_train.pdf&#39;</span><span class="p">)</span>
+            <span class="n">show_train_log</span><span class="p">(</span><span class="n">acc_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;train_metric_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;final_acc_train.pdf&#39;</span><span class="p">)</span>
+            <span class="n">show_train_log</span><span class="p">(</span><span class="n">acc_val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;val_metric_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;final_acc_val.pdf&#39;</span><span class="p">)</span>
+            <span class="n">show_train_log</span><span class="p">(</span><span class="n">acc_test</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;test_metric_list&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;final_acc_test.pdf&#39;</span><span class="p">)</span>
+            <span class="n">show_train_log</span><span class="p">(</span><span class="n">lrs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;lrs&#39;</span><span class="p">],</span> <span class="n">output_fname</span><span class="o">=</span><span class="s1">&#39;final_lrs.pdf&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="show_train_log"><a class="viewcode-back" href="../../NvTK.html#NvTK.Trainer.show_train_log">[docs]</a><span class="k">def</span> <span class="nf">show_train_log</span><span class="p">(</span><span class="n">loss_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">loss_val</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">acc_val</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                   <span class="n">loss_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">acc_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">lrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">fig_size</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span>
+                    <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">output_dir</span><span class="o">=</span><span class="s1">&#39;Figures&#39;</span><span class="p">,</span>
+                    <span class="n">output_fname</span><span class="o">=</span><span class="s2">&quot;Training_loss_log.pdf&quot;</span><span class="p">,</span>
+                    <span class="n">style</span><span class="o">=</span><span class="s2">&quot;seaborn-colorblind&quot;</span><span class="p">,</span>
+                    <span class="n">fig_title</span><span class="o">=</span><span class="s2">&quot;Training Log&quot;</span><span class="p">,</span>
+                    <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;function show train log in NvTK.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    loss_train : list</span>
+<span class="sd">        traing loss</span>
+<span class="sd">    loss_val : list</span>
+<span class="sd">        validation loss</span>
+<span class="sd">    kernel_size : int, optional</span>
+<span class="sd">        Size of the convolving kernel</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="kn">import</span> <span class="nn">matplotlib</span>
+    <span class="n">backend</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">get_backend</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">&quot;inline&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">backend</span><span class="p">:</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;PDF&quot;</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">style</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">loss_train</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">loss_train</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">loss_train</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training Loss&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">loss_val</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">loss_val</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">loss_val</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Validation Loss&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">loss_test</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">loss_test</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">loss_test</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Test Loss&#39;</span><span class="p">)</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">acc_val</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">acc_val</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="n">rate</span><span class="p">,</span> <span class="n">acc_val</span><span class="p">)),</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;X Validation Accuracy&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">acc_test</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">acc_test</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="n">rate</span><span class="p">,</span> <span class="n">acc_test</span><span class="p">)),</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;X Test Accuracy&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lrs</span><span class="p">:</span>
+        <span class="n">rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">lrs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lrs</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="n">rate</span><span class="p">,</span> <span class="n">lrs</span><span class="p">)),</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;X Learning Rates&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">fig_title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">output_fname</span><span class="p">),</span>
+                    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

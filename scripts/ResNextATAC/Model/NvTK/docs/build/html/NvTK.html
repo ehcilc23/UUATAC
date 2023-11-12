@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK package &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">NvTK package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#nvtk-architecture-module">NvTK.Architecture module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Config">NvTK.Config module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Evaluator">NvTK.Evaluator module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Trainer">NvTK.Trainer module</a></li>
+<li><a class="reference internal" href="#module-NvTK.nvtk">NvTK.nvtk module</a></li>
+<li><a class="reference internal" href="#module-NvTK">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>NvTK package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/NvTK.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="nvtk-package">
+<h1>NvTK package<a class="headerlink" href="#nvtk-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="NvTK.Explainer.html">NvTK.Explainer package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Explainer.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Explainer.html#module-NvTK.Explainer.Featuremap">NvTK.Explainer.Featuremap module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Explainer.html#module-NvTK.Explainer.Gradiant">NvTK.Explainer.Gradiant module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Explainer.html#module-NvTK.Explainer.Influence">NvTK.Explainer.Influence module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Explainer.html#module-NvTK.Explainer.Motif">NvTK.Explainer.Motif module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Explainer.html#module-NvTK.Explainer.MotifVisualize">NvTK.Explainer.MotifVisualize module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Explainer.html#nvtk-explainer-regulon-module">NvTK.Explainer.Regulon module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Explainer.html#module-NvTK.Explainer">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="NvTK.Model.html">NvTK.Model package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Model.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Model.html#module-NvTK.Model.BasicModel">NvTK.Model.BasicModel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Model.html#module-NvTK.Model.ConvModel">NvTK.Model.ConvModel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Model.html#module-NvTK.Model.Extention">NvTK.Model.Extention module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Model.html#module-NvTK.Model.Publications">NvTK.Model.Publications module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Model.html#module-NvTK.Model.ResNet">NvTK.Model.ResNet module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Model.html#module-NvTK.Model">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="NvTK.Modules.html">NvTK.Modules package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#module-NvTK.Modules.Attention">NvTK.Modules.Attention module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="NvTK.Modules.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#module-NvTK.Modules.BasicModule">NvTK.Modules.BasicModule module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#module-NvTK.Modules.CBAM">NvTK.Modules.CBAM module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="NvTK.Modules.html#id1">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#module-NvTK.Modules.ConvModule">NvTK.Modules.ConvModule module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#nvtk-modules-loss-module">NvTK.Modules.Loss module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#module-NvTK.Modules.MultiTask">NvTK.Modules.MultiTask module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#module-NvTK.Modules.Residual">NvTK.Modules.Residual module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#module-NvTK.Modules.SeqEmbed">NvTK.Modules.SeqEmbed module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#module-NvTK.Modules.Transformer">NvTK.Modules.Transformer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="NvTK.Modules.html#id2">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="NvTK.Modules.html#module-NvTK.Modules">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="nvtk-architecture-module">
+<h2>NvTK.Architecture module<a class="headerlink" href="#nvtk-architecture-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-NvTK.Config">
+<span id="nvtk-config-module"></span><h2>NvTK.Config module<a class="headerlink" href="#module-NvTK.Config" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="NvTK.Config.dump_config_to_json">
+<code class="descclassname">NvTK.Config.</code><code class="descname">dump_config_to_json</code><span class="sig-paren">(</span><em>config</em>, <em>fname='config_dump.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Config.html#dump_config_to_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Config.dump_config_to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Config.generate_dataloader_from_config">
+<code class="descclassname">NvTK.Config.</code><code class="descname">generate_dataloader_from_config</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Config.html#generate_dataloader_from_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Config.generate_dataloader_from_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Config.get_criterion_from_config">
+<code class="descclassname">NvTK.Config.</code><code class="descname">get_criterion_from_config</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Config.html#get_criterion_from_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Config.get_criterion_from_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Config.get_model_from_config">
+<code class="descclassname">NvTK.Config.</code><code class="descname">get_model_from_config</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Config.html#get_model_from_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Config.get_model_from_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Config.get_optimizer_from_config">
+<code class="descclassname">NvTK.Config.</code><code class="descname">get_optimizer_from_config</code><span class="sig-paren">(</span><em>config</em>, <em>model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Config.html#get_optimizer_from_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Config.get_optimizer_from_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Config.load_config_from_json">
+<code class="descclassname">NvTK.Config.</code><code class="descname">load_config_from_json</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Config.html#load_config_from_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Config.load_config_from_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Config.parse_model_args">
+<code class="descclassname">NvTK.Config.</code><code class="descname">parse_model_args</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Config.html#parse_model_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Config.parse_model_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>help-function of get_model_from_config</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Config.parse_modes_from_config">
+<code class="descclassname">NvTK.Config.</code><code class="descname">parse_modes_from_config</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Config.html#parse_modes_from_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Config.parse_modes_from_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Config.parse_trainer_args">
+<code class="descclassname">NvTK.Config.</code><code class="descname">parse_trainer_args</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Config.html#parse_trainer_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Config.parse_trainer_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Evaluator">
+<span id="nvtk-evaluator-module"></span><h2>NvTK.Evaluator module<a class="headerlink" href="#module-NvTK.Evaluator" title="Permalink to this headline">¶</a></h2>
+<p>Evaluate Metrics provided in NvTK.</p>
+<dl class="function">
+<dt id="NvTK.Evaluator.calculate_correlation">
+<code class="descclassname">NvTK.Evaluator.</code><code class="descname">calculate_correlation</code><span class="sig-paren">(</span><em>target</em>, <em>prediction</em>, <em>method='pearson'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Evaluator.html#calculate_correlation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Evaluator.calculate_correlation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Evaluator.calculate_pr">
+<code class="descclassname">NvTK.Evaluator.</code><code class="descname">calculate_pr</code><span class="sig-paren">(</span><em>target</em>, <em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Evaluator.html#calculate_pr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Evaluator.calculate_pr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Evaluator.calculate_roc">
+<code class="descclassname">NvTK.Evaluator.</code><code class="descname">calculate_roc</code><span class="sig-paren">(</span><em>target</em>, <em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Evaluator.html#calculate_roc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Evaluator.calculate_roc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Evaluator.map_prob2label">
+<code class="descclassname">NvTK.Evaluator.</code><code class="descname">map_prob2label</code><span class="sig-paren">(</span><em>y_pred_prob</em>, <em>map_fn=&lt;function argmax&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Evaluator.html#map_prob2label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Evaluator.map_prob2label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Evaluator.onehot_encode">
+<code class="descclassname">NvTK.Evaluator.</code><code class="descname">onehot_encode</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Evaluator.html#onehot_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Evaluator.onehot_encode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Evaluator.show_auc_curve">
+<code class="descclassname">NvTK.Evaluator.</code><code class="descname">show_auc_curve</code><span class="sig-paren">(</span><em>fpr</em>, <em>tpr</em>, <em>roc_auc</em>, <em>fig_size=(10</em>, <em>8)</em>, <em>save=True</em>, <em>output_dir='Figures'</em>, <em>output_fname='roc_curves.pdf'</em>, <em>style='seaborn-colorblind'</em>, <em>fig_title='Feature ROC curves'</em>, <em>dpi=500</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Evaluator.html#show_auc_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Evaluator.show_auc_curve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Evaluator.show_pr_curve">
+<code class="descclassname">NvTK.Evaluator.</code><code class="descname">show_pr_curve</code><span class="sig-paren">(</span><em>precision</em>, <em>recall</em>, <em>average_precision</em>, <em>fig_size=(10</em>, <em>8)</em>, <em>save=True</em>, <em>output_dir='Figures'</em>, <em>output_fname='pr_curves.pdf'</em>, <em>style='seaborn-colorblind'</em>, <em>fig_title='Feature PR curves'</em>, <em>dpi=500</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Evaluator.html#show_pr_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Evaluator.show_pr_curve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Evaluator.visualize_pr_curves">
+<code class="descclassname">NvTK.Evaluator.</code><code class="descname">visualize_pr_curves</code><span class="sig-paren">(</span><em>target</em>, <em>prediction</em>, <em>fig_size=(10</em>, <em>8)</em>, <em>save=True</em>, <em>output_dir='Figures'</em>, <em>output_fname='pr_curves.pdf'</em>, <em>style='seaborn-colorblind'</em>, <em>fig_title='Feature precision-recall curves'</em>, <em>dpi=500</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Evaluator.html#visualize_pr_curves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Evaluator.visualize_pr_curves" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output the precision-recall (PR) curves for each feature predicted by
+a model as an SVG.</p>
+<dl class="docutils">
+<dt>prediction <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
+<dd>Value predicted by user model.</dd>
+<dt>target <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
+<dd>True value that the user model was trying to predict.</dd>
+<dt>output_dir <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>The path to the directory to output the figures. Directories that
+do not currently exist will be automatically created.</dd>
+<dt>report_gt_feature_n_positives <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Default is 50. Do not visualize an PR curve for a feature with
+less than 50 positive examples in <cite>target</cite>.</dd>
+<dt>style <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd>Default is “seaborn-colorblind”. Specify a style available in
+<cite>matplotlib.pyplot.style.available</cite> to use.</dd>
+<dt>fig_title <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd>Default is “Feature precision-recall curves”. Set the figure title.</dd>
+<dt>dpi <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Default is 500. Specify dots per inch (resolution) of the figure.</dd>
+</dl>
+<dl class="docutils">
+<dt>None</dt>
+<dd>Outputs the figure in <cite>output_dir</cite>.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Evaluator.visualize_roc_curves">
+<code class="descclassname">NvTK.Evaluator.</code><code class="descname">visualize_roc_curves</code><span class="sig-paren">(</span><em>target</em>, <em>prediction</em>, <em>fig_size=(10</em>, <em>8)</em>, <em>save=True</em>, <em>output_dir='Figures'</em>, <em>output_fname='roc_curves.pdf'</em>, <em>style='seaborn-colorblind'</em>, <em>fig_title='Feature ROC curves'</em>, <em>dpi=500</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Evaluator.html#visualize_roc_curves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Evaluator.visualize_roc_curves" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output the ROC curves for each feature predicted by a model
+as an SVG.</p>
+<dl class="docutils">
+<dt>prediction <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
+<dd>Value predicted by user model.</dd>
+<dt>target <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
+<dd>True value that the user model was trying to predict.</dd>
+<dt>output_dir <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>The path to the directory to output the figures. Directories that
+do not currently exist will be automatically created.</dd>
+<dt>style <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd>Default is “seaborn-colorblind”. Specify a style available in
+<cite>matplotlib.pyplot.style.available</cite> to use.</dd>
+<dt>fig_title <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd>Default is “Feature ROC curves”. Set the figure title.</dd>
+<dt>dpi <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Default is 500. Specify dots per inch (resolution) of the figure.</dd>
+</dl>
+<dl class="docutils">
+<dt>None</dt>
+<dd>Outputs the figure in <cite>output_dir</cite>.</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Trainer">
+<span id="nvtk-trainer-module"></span><h2>NvTK.Trainer module<a class="headerlink" href="#module-NvTK.Trainer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="NvTK.Trainer.Trainer">
+<em class="property">class </em><code class="descclassname">NvTK.Trainer.</code><code class="descname">Trainer</code><span class="sig-paren">(</span><em>model</em>, <em>criterion</em>, <em>optimizer</em>, <em>device</em>, <em>tasktype='regression'</em>, <em>metric_sample=100</em>, <em>item_sample=50000</em>, <em>patience=10</em>, <em>resume=False</em>, <em>resume_dirs=None</em>, <em>use_tensorbord=False</em>, <em>tensorbord_args={}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Model Trainer</p>
+<dl class="method">
+<dt id="NvTK.Trainer.Trainer.add_graph">
+<code class="descname">add_graph</code><span class="sig-paren">(</span><em>input_shape=(2</em>, <em>4</em>, <em>1000)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer.add_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer.add_graph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Trainer.Trainer.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>predict_prob</em>, <em>target_prob</em>, <em>sample_tasks=True</em>, <em>sample_items=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Trainer.Trainer.get_current_model">
+<code class="descname">get_current_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer.get_current_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer.get_current_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Trainer.Trainer.load_best_model">
+<code class="descname">load_best_model</code><span class="sig-paren">(</span><em>fpath='./Log/best_model.pth'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer.load_best_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer.load_best_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Trainer.Trainer.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>data_loader</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer.predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Trainer.Trainer.save_checkpoint">
+<code class="descname">save_checkpoint</code><span class="sig-paren">(</span><em>best=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer.save_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer.save_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Trainer.Trainer.show_trainer_log">
+<code class="descname">show_trainer_log</code><span class="sig-paren">(</span><em>final=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer.show_trainer_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer.show_trainer_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Trainer.Trainer.train_batch">
+<code class="descname">train_batch</code><span class="sig-paren">(</span><em>data</em>, <em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer.train_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer.train_batch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Trainer.Trainer.train_per_epoch">
+<code class="descname">train_per_epoch</code><span class="sig-paren">(</span><em>train_loader</em>, <em>epoch</em>, <em>verbose_step=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer.train_per_epoch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer.train_per_epoch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Trainer.Trainer.train_until_converge">
+<code class="descname">train_until_converge</code><span class="sig-paren">(</span><em>train_loader</em>, <em>validate_loader</em>, <em>test_loader</em>, <em>EPOCH</em>, <em>resume=False</em>, <em>verbose_step=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#Trainer.train_until_converge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.Trainer.train_until_converge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Trainer.show_train_log">
+<code class="descclassname">NvTK.Trainer.</code><code class="descname">show_train_log</code><span class="sig-paren">(</span><em>loss_train=None</em>, <em>loss_val=None</em>, <em>acc_val=None</em>, <em>loss_test=None</em>, <em>acc_test=None</em>, <em>lrs=None</em>, <em>fig_size=(12</em>, <em>8)</em>, <em>save=True</em>, <em>output_dir='Figures'</em>, <em>output_fname='Training_loss_log.pdf'</em>, <em>style='seaborn-colorblind'</em>, <em>fig_title='Training Log'</em>, <em>dpi=500</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Trainer.html#show_train_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Trainer.show_train_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>function show train log in NvTK.</p>
+<dl class="docutils">
+<dt>loss_train <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>traing loss</dd>
+<dt>loss_val <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>validation loss</dd>
+<dt>kernel_size <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Size of the convolving kernel</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.nvtk">
+<span id="nvtk-nvtk-module"></span><h2>NvTK.nvtk module<a class="headerlink" href="#module-NvTK.nvtk" title="Permalink to this headline">¶</a></h2>
+<p>This module provides</p>
+<ol class="arabic simple">
+<li><cite>NvTKCLI</cite> class - the client class</li>
+<li><cite>execute_nvtk_hpo</cite> function - execute Hyper Parameter Optimization in NvTK</li>
+<li><cite>execute_nvtk_train</cite> function - execute model training in NvTK</li>
+<li><cite>execute_nvtk_evaluate</cite> function - execute model evaluation in NvTK</li>
+<li><cite>execute_nvtk_explain</cite> function - execute model explaination in NvTK</li>
+</ol>
+<p>and supporting methods.</p>
+<dl class="class">
+<dt id="NvTK.nvtk.NvTKCLI">
+<em class="property">class </em><code class="descclassname">NvTK.nvtk.</code><code class="descname">NvTKCLI</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/nvtk.html#NvTKCLI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.nvtk.NvTKCLI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="NvTK.nvtk.NvTKCLI.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/nvtk.html#NvTKCLI.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.nvtk.NvTKCLI.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>execute nvtk</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.nvtk.execute_nvtk_evaluate">
+<code class="descclassname">NvTK.nvtk.</code><code class="descname">execute_nvtk_evaluate</code><span class="sig-paren">(</span><em>trainer</em>, <em>test_loader</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/nvtk.html#execute_nvtk_evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.nvtk.execute_nvtk_evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.nvtk.execute_nvtk_explain">
+<code class="descclassname">NvTK.nvtk.</code><code class="descname">execute_nvtk_explain</code><span class="sig-paren">(</span><em>model</em>, <em>test_loader</em>, <em>motif_width</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/nvtk.html#execute_nvtk_explain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.nvtk.execute_nvtk_explain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.nvtk.execute_nvtk_hpo">
+<code class="descclassname">NvTK.nvtk.</code><code class="descname">execute_nvtk_hpo</code><span class="sig-paren">(</span><em>search_space=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/nvtk.html#execute_nvtk_hpo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.nvtk.execute_nvtk_hpo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.nvtk.execute_nvtk_train">
+<code class="descclassname">NvTK.nvtk.</code><code class="descname">execute_nvtk_train</code><span class="sig-paren">(</span><em>trainer</em>, <em>train_loader</em>, <em>validate_loader</em>, <em>test_loader</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/nvtk.html#execute_nvtk_train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.nvtk.execute_nvtk_train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-NvTK">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-NvTK" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="NvTK.initialize_logger">
+<code class="descclassname">NvTK.</code><code class="descname">initialize_logger</code><span class="sig-paren">(</span><em>output_path</em>, <em>verbosity=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK.html#initialize_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.initialize_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the logger for NvTK.
+This function can only be called successfully once.
+If the logger has already been initialized with handlers,
+the function exits. Otherwise, it proceeds to set the
+logger configurations.</p>
+<dl class="docutils">
+<dt>output_path <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>The path to the output file where logs will be written.</dd>
+<dt>verbosity <span class="classifier-delimiter">:</span> <span class="classifier">int, {2, 1, 0}</span></dt>
+<dd><p class="first">Default is 1. The level of logging verbosity to use.</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>0 - Only warnings will be logged.</li>
+<li>1 - Information and warnings will be logged.</li>
+<li>2 - Debug messages, information, and warnings will all be                  logged.</li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.set_random_seed">
+<code class="descclassname">NvTK.</code><code class="descname">set_random_seed</code><span class="sig-paren">(</span><em>random_seed=12</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK.html#set_random_seed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.set_random_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>set random_seed</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.set_torch_benchmark">
+<code class="descclassname">NvTK.</code><code class="descname">set_torch_benchmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK.html#set_torch_benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.set_torch_benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>set torch benchmark</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.set_torch_seed">
+<code class="descclassname">NvTK.</code><code class="descname">set_torch_seed</code><span class="sig-paren">(</span><em>random_seed=12</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK.html#set_torch_seed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.set_torch_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>set torch random_seed</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

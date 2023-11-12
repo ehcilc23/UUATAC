@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK.Modules package &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">NvTK.Modules package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-NvTK.Modules.Attention">NvTK.Modules.Attention module</a><ul>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-NvTK.Modules.BasicModule">NvTK.Modules.BasicModule module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Modules.CBAM">NvTK.Modules.CBAM module</a><ul>
+<li><a class="reference internal" href="#id1">References</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-NvTK.Modules.ConvModule">NvTK.Modules.ConvModule module</a></li>
+<li><a class="reference internal" href="#nvtk-modules-loss-module">NvTK.Modules.Loss module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Modules.MultiTask">NvTK.Modules.MultiTask module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Modules.Residual">NvTK.Modules.Residual module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Modules.SeqEmbed">NvTK.Modules.SeqEmbed module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Modules.Transformer">NvTK.Modules.Transformer module</a><ul>
+<li><a class="reference internal" href="#id2">References</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-NvTK.Modules">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>NvTK.Modules package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/NvTK.Modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="nvtk-modules-package">
+<h1>NvTK.Modules package<a class="headerlink" href="#nvtk-modules-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-NvTK.Modules.Attention">
+<span id="nvtk-modules-attention-module"></span><h2>NvTK.Modules.Attention module<a class="headerlink" href="#module-NvTK.Modules.Attention" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>[1](<a class="reference external" href="https://arxiv.org/abs/1410.5401">https://arxiv.org/abs/1410.5401</a>)</dt>
+<dd><dl class="first docutils">
+<dt>&#64;article{graves2014neural,</dt>
+<dd>title={Neural turing machines},
+author={Graves, Alex and Wayne, Greg and Danihelka, Ivo},
+journal={arXiv preprint arXiv:1410.5401},
+year={2014}</dd>
+</dl>
+<p class="last">}</p>
+</dd>
+<dt>[2](<a class="reference external" href="https://arxiv.org/abs/1503.08895">https://arxiv.org/abs/1503.08895</a>)</dt>
+<dd><dl class="first docutils">
+<dt>&#64;inproceedings{sukhbaatar2015end,</dt>
+<dd>title={End-to-end memory networks},
+author={Sukhbaatar, Sainbayar and Weston, Jason and Fergus, Rob and others},
+booktitle={Advances in neural information processing systems},
+pages={2440–2448},
+year={2015}</dd>
+</dl>
+<p class="last">}</p>
+</dd>
+<dt>[3](<a class="reference external" href="https://distill.pub/2016/augmented-rnns/">https://distill.pub/2016/augmented-rnns/</a>)</dt>
+<dd><dl class="first docutils">
+<dt>&#64;article{olah2016attention,</dt>
+<dd>title={Attention and augmented recurrent neural networks},
+author={Olah, Chris and Carter, Shan},
+journal={Distill},
+volume={1},
+number={9},
+pages={e1},
+year={2016}</dd>
+</dl>
+<p class="last">}</p>
+</dd>
+<dt>[4](<a class="reference external" href="https://arxiv.org/abs/1409.0473">https://arxiv.org/abs/1409.0473</a>)</dt>
+<dd><dl class="first docutils">
+<dt>&#64;article{bahdanau2014neural,</dt>
+<dd>title={Neural machine translation by jointly learning to align and translate},
+author={Bahdanau, Dzmitry and Cho, Kyunghyun and Bengio, Yoshua},
+journal={arXiv preprint arXiv:1409.0473},
+year={2014}</dd>
+</dl>
+<p class="last">}</p>
+</dd>
+<dt>[5](<a class="reference external" href="https://arxiv.org/abs/1506.03134">https://arxiv.org/abs/1506.03134</a>)</dt>
+<dd><dl class="first docutils">
+<dt>&#64;inproceedings{vinyals2015pointer,</dt>
+<dd>title={Pointer networks},
+author={Vinyals, Oriol and Fortunato, Meire and Jaitly, Navdeep},
+booktitle={Advances in Neural Information Processing Systems},
+pages={2692–2700},
+year={2015}</dd>
+</dl>
+<p class="last">}</p>
+</dd>
+</dl>
+<dl class="function">
+<dt id="NvTK.Modules.Attention.attend">
+<code class="descclassname">NvTK.Modules.Attention.</code><code class="descname">attend</code><span class="sig-paren">(</span><em>query</em>, <em>context</em>, <em>value=None</em>, <em>score='dot'</em>, <em>normalize='softmax'</em>, <em>context_sizes=None</em>, <em>context_mask=None</em>, <em>return_weight=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Attention.html#attend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Attention.attend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attend to value (or context) by scoring each query and context.
+Args
+—-
+query: Variable of size (B, M, D1)</p>
+<blockquote>
+<div>Batch of M query vectors.</div></blockquote>
+<dl class="docutils">
+<dt>context: Variable of size (B, N, D2)</dt>
+<dd>Batch of N context vectors.</dd>
+<dt>value: Variable of size (B, N, P), default=None</dt>
+<dd>If given, the output vectors will be weighted
+combinations of the value vectors.
+Otherwise, the context vectors will be used.</dd>
+<dt>score: str or callable, default=’dot’</dt>
+<dd><p class="first">If score == ‘dot’, scores are computed
+as the dot product between context and
+query vectors. This Requires D1 == D2.
+Otherwise, score should be a callable:</p>
+<blockquote class="last">
+<div><blockquote>
+<div>query    context     score</div></blockquote>
+<p>(B,M,D1) (B,N,D2) -&gt; (B,M,N)</p>
+</div></blockquote>
+</dd>
+<dt>normalize: str, default=’softmax’</dt>
+<dd>One of ‘softmax’, ‘sigmoid’, or ‘identity’.
+Name of function used to map scores to weights.</dd>
+<dt>context_mask: Tensor of (B, M, N), default=None</dt>
+<dd>A Tensor used to mask context. Masked
+and unmasked entries should be filled 
+appropriately for the normalization function.</dd>
+<dt>context_sizes: list[int], default=None,</dt>
+<dd>List giving the size of context for each item
+in the batch and used to compute a context_mask.
+If context_mask or context_sizes are not given,
+context is assumed to have fixed size.</dd>
+<dt>return_weight: bool, default=False</dt>
+<dd>If True, return the attention weight Tensor.</dd>
+</dl>
+<dl class="docutils">
+<dt>output: Variable of size (B, M, P)</dt>
+<dd>If return_weight is False.</dd>
+<dt>weight, output: Variable of size (B, M, N), Variable of size (B, M, P)</dt>
+<dd>If return_weight is True.</dd>
+</dl>
+<p>Attention is used to focus processing on a particular region of input.
+This function implements the most common attention mechanism [1, 2, 3],
+which produces an output by taking a weighted combination of value vectors
+with weights from by a scoring function operating over pairs of query and
+context vectors.
+Given query vector <cite>q</cite>, context vectors <cite>c_1,…,c_n</cite>, and value vectors
+<cite>v_1,…,v_n</cite> the attention score of <cite>q</cite> with <cite>c_i</cite> is given by</p>
+<blockquote>
+<div>s_i = f(q, c_i)</div></blockquote>
+<dl class="docutils">
+<dt>Frequently, <cite>f</cite> is given by the dot product between query and context vectors.</dt>
+<dd>s_i = q^T c_i</dd>
+</dl>
+<p>The scores are passed through a normalization functions g.
+This is normally the softmax function.</p>
+<blockquote>
+<div>w_i = g(s_1,…,s_n)_i</div></blockquote>
+<p>Finally, the output is computed as a weighted
+combination of the values with the normalized scores.</p>
+<blockquote>
+<div>z = sum_{i=1}^n w_i * v_i</div></blockquote>
+<p>In many applications [4, 5] the context and value vectors are the same, <cite>v_i = c_i</cite>.
+Sizes
+—–
+This function accepts batches of size <cite>B</cite> containing
+<cite>M</cite> query vectors of dimension <cite>D1</cite>,
+<cite>N</cite> context vectors of dimension <cite>D2</cite>, 
+and optionally <cite>N</cite> value vectors of dimension <cite>P</cite>.
+Variable Length Contexts
+————————    
+If the number of context vectors varies within a batch, a context
+can be ignored by forcing the corresponding weight to be zero.
+In the case of the softmax, this can be achieved by adding negative
+infinity to the corresponding score before normalization.
+Similarly, for elementwise normalization functions the weights can
+be multiplied by an appropriate {0,1} mask after normalization.
+To facilitate the above behavior, a context mask, with entries
+in <cite>{-inf, 0}</cite> or <cite>{0, 1}</cite> depending on the normalization function,
+can be passed to this function. The masks should have size <cite>(B, M, N)</cite>.
+Alternatively, a list can be passed giving the size of the context for
+each item in the batch. Appropriate masks will be created from these lists.
+Note that the size of output does not depend on the number of context vectors.
+Because of this, context positions are truly unaccounted for in the output.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Modules.Attention.dot">
+<code class="descclassname">NvTK.Modules.Attention.</code><code class="descname">dot</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Attention.html#dot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Attention.dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the dot product between pairs of vectors in 3D Variables.</p>
+<p>a: Variable of size (B, M, D)
+b: Variable of size (B, N, D)</p>
+<dl class="docutils">
+<dt>c: Variable of size (B, M, N)</dt>
+<dd>c[i,j,k] = dot(a[i,j], b[i,k])</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Modules.Attention.fill_context_mask">
+<code class="descclassname">NvTK.Modules.Attention.</code><code class="descname">fill_context_mask</code><span class="sig-paren">(</span><em>mask</em>, <em>sizes</em>, <em>v_mask</em>, <em>v_unmask</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Attention.html#fill_context_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Attention.fill_context_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill attention mask inplace for a variable length context.
+Args
+—-
+mask: Tensor of size (B, N, D)</p>
+<blockquote>
+<div>Tensor to fill with mask values.</div></blockquote>
+<dl class="docutils">
+<dt>sizes: list[int]</dt>
+<dd>List giving the size of the context for each item in
+the batch. Positions beyond each size will be masked.</dd>
+<dt>v_mask: float</dt>
+<dd>Value to use for masked positions.</dd>
+<dt>v_unmask: float</dt>
+<dd>Value to use for unmasked positions.</dd>
+</dl>
+<dl class="docutils">
+<dt>mask:</dt>
+<dd>Filled with values in {v_mask, v_unmask}</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Modules.Attention.mask3d">
+<code class="descclassname">NvTK.Modules.Attention.</code><code class="descname">mask3d</code><span class="sig-paren">(</span><em>value</em>, <em>sizes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Attention.html#mask3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Attention.mask3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mask entries in value with 0 based on sizes.
+Args
+—-
+value: Tensor of size (B, N, D)</p>
+<blockquote>
+<div>Tensor to be masked.</div></blockquote>
+<dl class="docutils">
+<dt>sizes: list of int</dt>
+<dd>List giving the number of valid values for each item
+in the batch. Positions beyond each size will be masked.</dd>
+</dl>
+<dl class="docutils">
+<dt>value:</dt>
+<dd>Masked value.</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-NvTK.Modules.BasicModule">
+<span id="nvtk-modules-basicmodule-module"></span><h2>NvTK.Modules.BasicModule module<a class="headerlink" href="#module-NvTK.Modules.BasicModule" title="Permalink to this headline">¶</a></h2>
+<p>Basic module in NvTK.
+This module provides</p>
+<ol class="arabic simple">
+<li><cite>BasicModule</cite> class - the general abstract class</li>
+<li><cite>BasicConv1d</cite> class - Basic Convolutional Module (1d)</li>
+<li><cite>BasicRNNModule</cite> class - Basic RNN(LSTM) Module in batch-first style</li>
+<li><cite>BasicLinearModule</cite></li>
+<li><cite>BasicPredictor</cite> Module</li>
+<li><cite>BasicLoss</cite> Module</li>
+</ol>
+<p>and supporting methods.</p>
+<dl class="class">
+<dt id="NvTK.Modules.BasicModule.BasicModule">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.BasicModule.</code><code class="descname">BasicModule</code><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Basic module class in NvTK.</p>
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicModule.initialize_weights">
+<code class="descname">initialize_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicModule.initialize_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicModule.initialize_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize module parameters.</p>
+<p>Conv module weight will be initialize in <a href="#id3"><span class="problematic" id="id4">xavier_normal_</span></a>,
+bias will be initialize in <a href="#id5"><span class="problematic" id="id6">zero_</span></a></p>
+<p>Linear module weight will be initialize in <a href="#id7"><span class="problematic" id="id8">xavier_normal_</span></a>,
+bias will be initialize in <a href="#id9"><span class="problematic" id="id10">zero_</span></a></p>
+<p>BatchNorm module weight will be initialize in constant = 1,
+bias will be initialize in constant = 0</p>
+<p>LSTM module weight will be initialize in <a href="#id11"><span class="problematic" id="id12">orthogonal_</span></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicModule.initialize_weights_from_pretrained">
+<code class="descname">initialize_weights_from_pretrained</code><span class="sig-paren">(</span><em>pretrained_net_fname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicModule.initialize_weights_from_pretrained"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicModule.initialize_weights_from_pretrained" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize module weights from pretrained model</p>
+<dl class="docutils">
+<dt>pretrained_net_fname <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>the pretrained model file path (e.g. <cite>checkpoint.pth</cite>).</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicModule.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicModule.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicModule.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>load module weights from saved model</p>
+<dl class="docutils">
+<dt>path <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>the saved model file path (e.g. <cite>checkpoint.pth</cite>).</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicModule.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>fname=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicModule.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicModule.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save module weights to file</p>
+<dl class="docutils">
+<dt>fname <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd>Specify the saved model file path.
+Default is “None”. Saved file will be formatted as “model.time.pth”.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicModule.test">
+<code class="descname">test</code><span class="sig-paren">(</span><em>input_size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicModule.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicModule.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.BasicModule.BasicConv1d">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.BasicModule.</code><code class="descname">BasicConv1d</code><span class="sig-paren">(</span><em>in_planes</em>, <em>out_planes</em>, <em>kernel_size=3</em>, <em>conv_args={}</em>, <em>bn=True</em>, <em>activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em>activation_args={}</em>, <em>dropout=True</em>, <em>dropout_args={'p': 0.5}</em>, <em>pool=&lt;class 'torch.nn.modules.pooling.AvgPool1d'&gt;</em>, <em>pool_args={'kernel_size': 3}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicConv1d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicConv1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<p>Basic Convolutional Module (1d) in NvTK.</p>
+<dl class="docutils">
+<dt>in_planes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of input channels</dd>
+<dt>out_planes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of output channels produced by the convolution</dd>
+<dt>kernel_size <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Size of the convolving kernel</dd>
+<dt>conv_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Other convolutional args, Default is dict().
+Will be pass to <cite>torch.nn.Conv1d(**conv_args)</cite>
+(e.g. <cite>conv_args={‘dilation’:1}</cite>)</dd>
+<dt>bn <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether to use BatchNorm1d, Default is True.</dd>
+<dt>activation <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module, optional</span></dt>
+<dd>Activation Module, Default is nn.ReLU.</dd>
+<dt>activation_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Other activation args, Default is dict().
+Will be pass to <cite>activation(**activation_args)</cite>
+(e.g. <cite>activation=nn.LeakyReLU, activation_args={‘p’:0.2}</cite>)</dd>
+<dt>dropout <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether to use Dropout, Default is True.</dd>
+<dt>dropout_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Dropout args, Default is {‘p’:0.5}.
+Will be pass to <cite>nn.Dropout(**dropout_args)</cite> if dropout
+(e.g. <cite>dropout=True, dropout_args={‘p’:0.5}</cite>)</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module, optional</span></dt>
+<dd>Pool Module (1d), Default is nn.AvgPool1d.</dd>
+<dt>pool_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Other pool args, Default is {‘kernel_size’: 3}.
+Will be pass to <cite>pool(**pool_args)</cite>
+(e.g. <cite>pool=nn.AvgPool1d, pool_args={‘kernel_size’: 3}</cite>)</dd>
+</dl>
+<p>in_channels : int</p>
+<p>out_channels : int</p>
+<dl class="docutils">
+<dt>conv <span class="classifier-delimiter">:</span> <span class="classifier">nn.Conv1d</span></dt>
+<dd>The convolutional neural network component of the model.</dd>
+<dt>bn <span class="classifier-delimiter">:</span> <span class="classifier">nn.BatchNorm1d</span></dt>
+<dd>The Batch Normalization</dd>
+<dt>activation <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module</span></dt>
+<dd>The activation Module</dd>
+<dt>dropout <span class="classifier-delimiter">:</span> <span class="classifier">nn.Dropout</span></dt>
+<dd>The Dropout Module</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module</span></dt>
+<dd>The pool Module</dd>
+</dl>
+<p>-&gt; conv(x)</p>
+<p>-&gt; bn(x) if bn</p>
+<p>-&gt; activation(x) if activation</p>
+<p>-&gt; dropout(x) if dropout</p>
+<p>-&gt; pool(x) if pool</p>
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicConv1d.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicConv1d.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicConv1d.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.BasicModule.BasicRNNModule">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.BasicModule.</code><code class="descname">BasicRNNModule</code><span class="sig-paren">(</span><em>LSTM_input_size=512</em>, <em>LSTM_hidden_size=512</em>, <em>LSTM_hidden_layes=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicRNNModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicRNNModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<p>Basic RNN(LSTM) Module in batch-first style</p>
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicRNNModule.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>input</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicRNNModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicRNNModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.BasicModule.BasicLinearModule">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.BasicModule.</code><code class="descname">BasicLinearModule</code><span class="sig-paren">(</span><em>input_size</em>, <em>output_size</em>, <em>bias=True</em>, <em>bn=True</em>, <em>activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em>activation_args={}</em>, <em>dropout=True</em>, <em>dropout_args={'p': 0.5}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicLinearModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicLinearModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<p>Basic Linear Module in NvTK.</p>
+<dl class="docutils">
+<dt>input_size <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of input size</dd>
+<dt>output_size <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of output size produced by the Linear</dd>
+<dt>bias <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Bias of the Linear, Default is True.
+It could be False when use BatchNorm.</dd>
+<dt>bn <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether to use BatchNorm1d, Default is True.</dd>
+<dt>activation <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module, optional</span></dt>
+<dd>Activation Module, Default is nn.ReLU.</dd>
+<dt>activation_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Other activation args, Default is dict().
+Will be pass to <cite>activation(**activation_args)</cite>
+(e.g. <cite>activation=nn.LeakyReLU, activation_args={‘p’:0.2}</cite>)</dd>
+<dt>dropout <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether to use Dropout, Default is True.</dd>
+<dt>dropout_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Dropout args, Default is {‘p’:0.5}.
+Will be pass to <cite>nn.Dropout(**dropout_args)</cite> if dropout
+(e.g. <cite>dropout=True, dropout_args={‘p’:0.5}</cite>)</dd>
+</dl>
+<p>input_size : int</p>
+<p>output_size : int</p>
+<dl class="docutils">
+<dt>linear <span class="classifier-delimiter">:</span> <span class="classifier">nn.Linear</span></dt>
+<dd>The Linear neural network component</dd>
+<dt>bn <span class="classifier-delimiter">:</span> <span class="classifier">nn.BatchNorm1d</span></dt>
+<dd>The Batch Normalization</dd>
+<dt>activation <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module</span></dt>
+<dd>The activation Module</dd>
+<dt>dropout <span class="classifier-delimiter">:</span> <span class="classifier">nn.Dropout</span></dt>
+<dd>The Dropout Module</dd>
+</dl>
+<p>-&gt; linear(x)</p>
+<p>-&gt; bn(x) if bn</p>
+<p>-&gt; activation(x) if activation</p>
+<p>-&gt; dropout(x) if dropout</p>
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicLinearModule.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicLinearModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicLinearModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.BasicModule.BasicPredictor">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.BasicModule.</code><code class="descname">BasicPredictor</code><span class="sig-paren">(</span><em>input_size</em>, <em>output_size</em>, <em>tasktype='binary_classification'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicPredictor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicPredictor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<p>BasicPredictor Module in NvTK.</p>
+<p>BasicPredictor support task types of ‘none’, ‘binary_classification’, ‘classification’, ‘regression’;
+1. ‘none’ : nullify the whole BaiscPredictor with identity
+2. ‘binary_classification’ : activate with Sigmoid
+3. ‘classification’ : activate with Softmax(dim=1)
+4. ‘regression’ : Identity</p>
+<dl class="docutils">
+<dt>input_size <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of input size</dd>
+<dt>output_size <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of output size (task numbers)</dd>
+<dt>tasktype <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd>Specify the task type, Default is “binary_classification”.
+(e.g. <cite>tasktype=”regression”</cite>)</dd>
+</dl>
+<p>supported_tasks : currently supported task types
+tasktype : task type of Predictor
+input_size : int
+Map : nn.Linear</p>
+<blockquote>
+<div>The Linear Module Mapping input to output.</div></blockquote>
+<dl class="docutils">
+<dt>Pred: nn.Module</dt>
+<dd>The Activation Module in specified task type.</dd>
+</dl>
+<p>-&gt; Map(x)</p>
+<p>-&gt; Pred(x)</p>
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicPredictor.current_task">
+<code class="descname">current_task</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicPredictor.current_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicPredictor.current_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>return current task type</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicPredictor.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicPredictor.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicPredictor.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicPredictor.remove">
+<code class="descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicPredictor.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicPredictor.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predictor.remove: replace predictor with null Sequential,
+same as switch_task(‘none’)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicPredictor.switch_task">
+<code class="descname">switch_task</code><span class="sig-paren">(</span><em>tasktype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicPredictor.switch_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicPredictor.switch_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>switch to specified task type</p>
+<dl class="docutils">
+<dt>tasktype <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Specify the task type (e.g. <cite>tasktype=”regression”</cite>)</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.BasicModule.BasicLoss">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.BasicModule.</code><code class="descname">BasicLoss</code><span class="sig-paren">(</span><em>tasktype='binary_classification'</em>, <em>reduction='mean'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>BasicLoss Module in NvTK.</p>
+<p>BasicLoss support task types of ‘binary_classification’, ‘classification’, ‘regression’;
+1. ‘binary_classification’ : BCELoss function
+2. ‘classification’ : CrossEntropyLoss function
+3. ‘regression’ : MSELoss function</p>
+<dl class="docutils">
+<dt>tasktype <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd>Specify the task type, Default is “binary_classification”.
+(e.g. <cite>tasktype=”regression”</cite>)</dd>
+<dt>reduction <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd>Specifies the reduction to apply to the output: <cite>‘none’</cite> | <cite>‘mean’</cite> | <cite>‘sum’</cite>.</dd>
+</dl>
+<p>supported_tasks : currently supported task types
+tasktype : task type of Predictor
+loss : loss function</p>
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicLoss.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>pred</em>, <em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.BasicLoss.switch_task">
+<code class="descname">switch_task</code><span class="sig-paren">(</span><em>tasktype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#BasicLoss.switch_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.BasicLoss.switch_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>switch to specified task type</p>
+<dl class="docutils">
+<dt>tasktype <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Specify the task type (e.g. <cite>tasktype=”regression”</cite>)</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.BasicModule.Flatten">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.BasicModule.</code><code class="descname">Flatten</code><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#Flatten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.Flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Flatten Module: flatten the tensor as (batch_size, -1).</p>
+<dl class="method">
+<dt id="NvTK.Modules.BasicModule.Flatten.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/BasicModule.html#Flatten.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.BasicModule.Flatten.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Modules.CBAM">
+<span id="nvtk-modules-cbam-module"></span><h2>NvTK.Modules.CBAM module<a class="headerlink" href="#module-NvTK.Modules.CBAM" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>References<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>[1](<a class="reference external" href="http://arxiv.org/abs/1807.06521v2">http://arxiv.org/abs/1807.06521v2</a>)</dt>
+<dd><dl class="first docutils">
+<dt>&#64;InProceedings{Woo_2018_ECCV,</dt>
+<dd>author = {Woo, Sanghyun and Park, Jongchan and Lee, Joon-Young and Kweon, In So},
+title = {CBAM: Convolutional Block Attention Module},
+booktitle = {Proceedings of the European Conference on Computer Vision (ECCV)},
+month = {September},
+year = {2018}</dd>
+</dl>
+<p class="last">}</p>
+</dd>
+</dl>
+<dl class="class">
+<dt id="NvTK.Modules.CBAM.CBAM">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.CBAM.</code><code class="descname">CBAM</code><span class="sig-paren">(</span><em>gate_channels, reduction_ratio=16, pool_types=['avg', 'max'], no_spatial=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/CBAM.html#CBAM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.CBAM.CBAM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>CBAM: Convolutional Block Attention Module (1d) in NvTK.</p>
+<dl class="docutils">
+<dt>gate_channels <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of gate channels</dd>
+<dt>reduction_ratio <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Number of reduction ratio in ChannelGate</dd>
+<dt>pool_types <span class="classifier-delimiter">:</span> <span class="classifier">list of str, optional</span></dt>
+<dd>List of Pooling types in ChannelGate, Default is [‘avg’, ‘max’].
+Should be in the range of <cite>[‘avg’, ‘max’, ‘lse’]</cite>
+(e.g. <cite>pool_types=[‘avg’, ‘max’, ‘lse’]</cite>)</dd>
+<dt>no_spatial <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether not to use SpatialGate, Default is False.</dd>
+</dl>
+<p>no_spatial : bool</p>
+<dl class="docutils">
+<dt>ChannelGate <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module</span></dt>
+<dd>The Channel Gate Module in CBAM</dd>
+<dt>SpatialGate <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module</span></dt>
+<dd>The Spatial Gate Module in CBAM</dd>
+<dt>attention <span class="classifier-delimiter">:</span> <span class="classifier">nn.Tensor</span></dt>
+<dd>The overall attention weights</dd>
+</dl>
+<p>-&gt; ChannelGate(x)</p>
+<p>-&gt; SpatialGate(x_out)(x) if not no_spatial</p>
+<dl class="method">
+<dt id="NvTK.Modules.CBAM.CBAM.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/CBAM.html#CBAM.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.CBAM.CBAM.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.CBAM.CBAM.get_attention">
+<code class="descname">get_attention</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/CBAM.html#CBAM.get_attention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.CBAM.CBAM.get_attention" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the attention weights in a batch</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-NvTK.Modules.ConvModule">
+<span id="nvtk-modules-convmodule-module"></span><h2>NvTK.Modules.ConvModule module<a class="headerlink" href="#module-NvTK.Modules.ConvModule" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="NvTK.Modules.ConvModule.DeepConvModule">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.ConvModule.</code><code class="descname">DeepConvModule</code><span class="sig-paren">(</span><em>in_planes</em>, <em>out_planes</em>, <em>Layers=4</em>, <em>hidden_channels=256</em>, <em>kernel_size=3</em>, <em>bn=True</em>, <em>activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em>activation_args={}</em>, <em>pool=&lt;class 'torch.nn.modules.pooling.AvgPool1d'&gt;</em>, <em>pool_args={'kernel_size': 3}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/ConvModule.html#DeepConvModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.ConvModule.DeepConvModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="NvTK.Modules.ConvModule.DeepConvModule.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/ConvModule.html#DeepConvModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.ConvModule.DeepConvModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.ConvModule.ShallowWideConvModule">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.ConvModule.</code><code class="descname">ShallowWideConvModule</code><span class="sig-paren">(</span><em>numFiltersConv1=40</em>, <em>filterLenConv1=5</em>, <em>numFiltersConv2=44</em>, <em>filterLenConv2=15</em>, <em>numFiltersConv3=44</em>, <em>filterLenConv3=25</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/ConvModule.html#ShallowWideConvModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.ConvModule.ShallowWideConvModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="NvTK.Modules.ConvModule.ShallowWideConvModule.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/ConvModule.html#ShallowWideConvModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.ConvModule.ShallowWideConvModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="nvtk-modules-loss-module">
+<h2>NvTK.Modules.Loss module<a class="headerlink" href="#nvtk-modules-loss-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-NvTK.Modules.MultiTask">
+<span id="nvtk-modules-multitask-module"></span><h2>NvTK.Modules.MultiTask module<a class="headerlink" href="#module-NvTK.Modules.MultiTask" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="NvTK.Modules.MultiTask.ConcatenateTask">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.MultiTask.</code><code class="descname">ConcatenateTask</code><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#ConcatenateTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.ConcatenateTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="NvTK.Modules.MultiTask.ConcatenateTask.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#ConcatenateTask.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.ConcatenateTask.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.MultiTask.MTLModel">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.MultiTask.</code><code class="descname">MTLModel</code><span class="sig-paren">(</span><em>task_layers</em>, <em>output_tasks</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#MTLModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.MTLModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>A torch.nn.Module built from a set of shared and task specific layers
+Attributes
+———-
+g : networkx.Graph</p>
+<blockquote>
+<div>The meta-computation graph</div></blockquote>
+<dl class="docutils">
+<dt>task_layers <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>A list which holds the layers for which to build the computation graph</dd>
+<dt>output_tasks <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>A list which holds the tasks for which the output should be returned</dd>
+<dt>layer_names <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>A list of the names of each layer</dd>
+<dt>losses <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd>A dictionary which maps the name of a layer to its loss function</dd>
+<dt>loss_weights <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd>A dictionary which maps the name of a layer to the weight of its loss
+function</dd>
+</dl>
+<dl class="method">
+<dt id="NvTK.Modules.MultiTask.MTLModel.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>input</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#MTLModel.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.MTLModel.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.MultiTask.MTLTrainer">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.MultiTask.</code><code class="descname">MTLTrainer</code><span class="sig-paren">(</span><em>model</em>, <em>criterion</em>, <em>optimizer</em>, <em>device</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#MTLTrainer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.MTLTrainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="NvTK.Modules.MultiTask.MTLTrainer.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#MTLTrainer.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.MTLTrainer.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.MultiTask.MTLTrainer.get_current_model">
+<code class="descname">get_current_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#MTLTrainer.get_current_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.MTLTrainer.get_current_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.MultiTask.MTLTrainer.train_per_epoch">
+<code class="descname">train_per_epoch</code><span class="sig-paren">(</span><em>train_loader</em>, <em>epoch</em>, <em>verbose_step=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#MTLTrainer.train_per_epoch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.MTLTrainer.train_per_epoch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.MultiTask.MultiTaskWrapper">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.MultiTask.</code><code class="descname">MultiTaskWrapper</code><span class="sig-paren">(</span><em>sub_models</em>, <em>concat_dim=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#MultiTaskWrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.MultiTaskWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="NvTK.Modules.MultiTask.MultiTaskWrapper.cuda">
+<code class="descname">cuda</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#MultiTaskWrapper.cuda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.MultiTaskWrapper.cuda" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves all model parameters and buffers to the GPU.</p>
+<p>This also makes associated parameters and buffers different objects. So
+it should be called before constructing optimizer if the module will
+live on GPU while being optimized.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This method modifies the module in-place.</p>
+</div>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>device (int, optional): if specified, all parameters will be</dt>
+<dd>copied to that device</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>Module: self</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.MultiTask.MultiTaskWrapper.eval">
+<code class="descname">eval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#MultiTaskWrapper.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.MultiTaskWrapper.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the module in evaluation mode.</p>
+<p>This has any effect only on certain modules. See documentations of
+particular modules for details of their behaviors in training/evaluation
+mode, if they are affected, e.g. <code class="xref py py-class docutils literal notranslate"><span class="pre">Dropout</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchNorm</span></code>,
+etc.</p>
+<p>This is equivalent with <code class="xref py py-meth docutils literal notranslate"><span class="pre">self.train(False)</span></code>.</p>
+<p>See <span class="xref std std-ref">locally-disable-grad-doc</span> for a comparison between
+<cite>.eval()</cite> and several similar mechanisms that may be confused with it.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>Module: self</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.MultiTask.MultiTaskWrapper.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/MultiTask.html#MultiTaskWrapper.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.MultiTask.MultiTaskWrapper.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Modules.Residual">
+<span id="nvtk-modules-residual-module"></span><h2>NvTK.Modules.Residual module<a class="headerlink" href="#module-NvTK.Modules.Residual" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>&#64;inproceedings{li2019selective,</dt>
+<dd>title={Selective Kernel Networks},
+author={Li, Xiang and Wang, Wenhai and Hu, Xiaolin and Yang, Jian},
+journal={IEEE Conference on Computer Vision and Pattern Recognition},
+year={2019}</dd>
+</dl>
+<p>}</p>
+<dl class="docutils">
+<dt>&#64;inproceedings{li2019spatial,</dt>
+<dd>title={Spatial Group-wise Enhance: Enhancing Semantic Feature Learning in Convolutional Networks},
+author={Li, Xiang and Hu, Xiaolin and Xia, Yan and Yang, Jian},
+journal={arXiv preprint arXiv:1905.09646},
+year={2019}</dd>
+</dl>
+<p>}</p>
+<dl class="docutils">
+<dt>&#64;inproceedings{li2019understanding,</dt>
+<dd>title={Understanding the Disharmony between Weight Normalization Family and Weight Decay: e-shifted L2 Regularizer},
+author={Li, Xiang and Chen, Shuo and Yang, Jian},
+journal={arXiv preprint arXiv:},
+year={2019}</dd>
+</dl>
+<p>}</p>
+<dl class="docutils">
+<dt>&#64;inproceedings{li2019generalization,</dt>
+<dd>title={Generalization Bound Regularizer: A Unified Framework for Understanding Weight Decay},
+author={Li, Xiang and Chen, Shuo and Gong, Chen and Xia, Yan and Yang, Jian},
+journal={arXiv preprint arXiv:},
+year={2019}</dd>
+</dl>
+<p>}</p>
+<dl class="class">
+<dt id="NvTK.Modules.Residual.BasicBlock">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.Residual.</code><code class="descname">BasicBlock</code><span class="sig-paren">(</span><em>inplanes</em>, <em>planes</em>, <em>stride=1</em>, <em>downsample=None</em>, <em>use_cbam=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Residual.html#BasicBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Residual.BasicBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Basic residual Block with conv1x3.</p>
+<dl class="docutils">
+<dt>inplanes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of input channels</dd>
+<dt>planes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of output channels produced by the convolution</dd>
+<dt>stride <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Number of stride, Default is 1.</dd>
+<dt>use_cbam <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether to use CBAM, Default is False.</dd>
+</dl>
+<dl class="docutils">
+<dt>conv1 <span class="classifier-delimiter">:</span> <span class="classifier">conv1x3</span></dt>
+<dd>The convolutional neural network component of the model.</dd>
+<dt>bn1 <span class="classifier-delimiter">:</span> <span class="classifier">nn.BatchNorm2d</span></dt>
+<dd>The Batch Normalization</dd>
+<dt>conv2 <span class="classifier-delimiter">:</span> <span class="classifier">conv1x3</span></dt>
+<dd>The convolutional neural network component of the model.</dd>
+<dt>bn2 <span class="classifier-delimiter">:</span> <span class="classifier">nn.BatchNorm2d</span></dt>
+<dd>The Batch Normalization</dd>
+<dt>relu <span class="classifier-delimiter">:</span> <span class="classifier">nn.ReLU</span></dt>
+<dd>The relu activation Module</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module</span></dt>
+<dd>The pool Module</dd>
+<dt>cbam <span class="classifier-delimiter">:</span> <span class="classifier">CBAM</span></dt>
+<dd>Convolutional Block Attention Module</dd>
+</dl>
+<p>-&gt; residual = x</p>
+<p>-&gt; relu(bn1(conv1(x)))</p>
+<p>-&gt; bn2(conv2(x))</p>
+<p>-&gt; cbam(x) if use_cbam</p>
+<p>-&gt; relu(x + residual)</p>
+<dl class="attribute">
+<dt id="NvTK.Modules.Residual.BasicBlock.expansion">
+<code class="descname">expansion</code><em class="property"> = 1</em><a class="headerlink" href="#NvTK.Modules.Residual.BasicBlock.expansion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.Residual.BasicBlock.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Residual.html#BasicBlock.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Residual.BasicBlock.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.Residual.Bottleneck">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.Residual.</code><code class="descname">Bottleneck</code><span class="sig-paren">(</span><em>inplanes</em>, <em>planes</em>, <em>stride=1</em>, <em>downsample=None</em>, <em>use_cbam=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Residual.html#Bottleneck"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Residual.Bottleneck" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Basic residual Bottleneck with conv2d.</p>
+<dl class="docutils">
+<dt>inplanes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of input channels</dd>
+<dt>planes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of output channels produced by the convolution</dd>
+<dt>stride <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Number of stride, Default is 1.</dd>
+<dt>use_cbam <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether to use CBAM, Default is False.</dd>
+</dl>
+<dl class="docutils">
+<dt>conv1 <span class="classifier-delimiter">:</span> <span class="classifier">nn.Conv2d</span></dt>
+<dd>The convolutional neural network component of the model.</dd>
+<dt>bn1 <span class="classifier-delimiter">:</span> <span class="classifier">nn.BatchNorm2d</span></dt>
+<dd>The Batch Normalization</dd>
+<dt>conv2 <span class="classifier-delimiter">:</span> <span class="classifier">nn.Conv2d</span></dt>
+<dd>The convolutional neural network component of the model.</dd>
+<dt>bn2 <span class="classifier-delimiter">:</span> <span class="classifier">nn.BatchNorm2d</span></dt>
+<dd>The Batch Normalization</dd>
+<dt>conv3 <span class="classifier-delimiter">:</span> <span class="classifier">nn.Conv2d</span></dt>
+<dd>The convolutional neural network component of the model.</dd>
+<dt>bn3 <span class="classifier-delimiter">:</span> <span class="classifier">nn.BatchNorm2d</span></dt>
+<dd>The Batch Normalization</dd>
+<dt>relu <span class="classifier-delimiter">:</span> <span class="classifier">nn.ReLU</span></dt>
+<dd>The relu activation Module</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module</span></dt>
+<dd>The pool Module</dd>
+<dt>cbam <span class="classifier-delimiter">:</span> <span class="classifier">CBAM</span></dt>
+<dd>Convolutional Block Attention Module</dd>
+</dl>
+<p>-&gt; residual = x</p>
+<p>-&gt; relu(bn1(conv1(x)))</p>
+<p>-&gt; relu(bn2(conv2(x)))</p>
+<p>-&gt; bn3(conv3(x))</p>
+<p>-&gt; cbam(x) if use_cbam</p>
+<p>-&gt; relu(x + residual)</p>
+<dl class="attribute">
+<dt id="NvTK.Modules.Residual.Bottleneck.expansion">
+<code class="descname">expansion</code><em class="property"> = 4</em><a class="headerlink" href="#NvTK.Modules.Residual.Bottleneck.expansion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.Residual.Bottleneck.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Residual.html#Bottleneck.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Residual.Bottleneck.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.Residual.ResNet">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.Residual.</code><code class="descname">ResNet</code><span class="sig-paren">(</span><em>block</em>, <em>layers</em>, <em>network_type=None</em>, <em>num_classes=None</em>, <em>att_type=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Residual.html#ResNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Residual.ResNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<p>ResNet module in NvTK.</p>
+<dl class="docutils">
+<dt>block <span class="classifier-delimiter">:</span> <span class="classifier">BasicBlock, Bottleneck</span></dt>
+<dd>One of the Residual Block Module</dd>
+<dt>layers <span class="classifier-delimiter">:</span> <span class="classifier">list of int</span></dt>
+<dd>List of Number of output channels in ResNet.
+(e.g. <cite>layers=[2, 2, 2, 2]</cite>)</dd>
+<dt>network_type <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Type of ResNet, Default is None.
+Should be one of <cite>‘ImageNet’, ‘CIFAR10’, ‘CIFAR100’, None</cite>
+(e.g. <cite>network_type=’ImageNet’</cite>)</dd>
+<dt>num_classes <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Number of output classes</dd>
+<dt>att_type <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd>Whether to use CBAM_ResNet, Default is None.</dd>
+</dl>
+<p>inplanes : int</p>
+<p>network_type : str</p>
+<dl class="docutils">
+<dt>conv1 <span class="classifier-delimiter">:</span> <span class="classifier">nn.Conv2d</span></dt>
+<dd>The convolutional neural network component of the model.</dd>
+<dt>bn1 <span class="classifier-delimiter">:</span> <span class="classifier">nn.BatchNorm2d</span></dt>
+<dd>The Batch Normalization</dd>
+<dt>conv2 <span class="classifier-delimiter">:</span> <span class="classifier">nn.Conv2d</span></dt>
+<dd>The convolutional neural network component of the model.</dd>
+<dt>layer1 <span class="classifier-delimiter">:</span> <span class="classifier">nn.Sequential</span></dt>
+<dd>The Residual convolutional layer</dd>
+<dt>bam1 <span class="classifier-delimiter">:</span> <span class="classifier">CBAM</span></dt>
+<dd>The Convolutional Block Attention Module</dd>
+<dt>layer2 <span class="classifier-delimiter">:</span> <span class="classifier">nn.Sequential</span></dt>
+<dd>The Residual convolutional layer</dd>
+<dt>bam2 <span class="classifier-delimiter">:</span> <span class="classifier">CBAM</span></dt>
+<dd>The Convolutional Block Attention Module</dd>
+<dt>layer3 <span class="classifier-delimiter">:</span> <span class="classifier">nn.Sequential</span></dt>
+<dd>The Residual convolutional layer</dd>
+<dt>bam3 <span class="classifier-delimiter">:</span> <span class="classifier">CBAM</span></dt>
+<dd>The Convolutional Block Attention Module</dd>
+<dt>layer4 <span class="classifier-delimiter">:</span> <span class="classifier">nn.Sequential</span></dt>
+<dd>The Residual convolutional layer</dd>
+<dt>fc <span class="classifier-delimiter">:</span> <span class="classifier">nn.Linear</span></dt>
+<dd>The Full connectted layer</dd>
+</dl>
+<p>-&gt; x if network_type is None</p>
+<p>-&gt; relu(bn1(conv1(x))) if network_type is CIFAR</p>
+<p>-&gt; maxpool(relu(bn1(conv1(x)))) if network_type is ImageNet</p>
+<p>-&gt; layer1(x)</p>
+<p>-&gt; bam1(x) if bam1</p>
+<p>-&gt; layer2(x)</p>
+<p>-&gt; bam2(x) if bam2</p>
+<p>-&gt; layer3(x)</p>
+<p>-&gt; bam3(x) if bam3</p>
+<p>-&gt; layer4(x)</p>
+<p>-&gt; Faltten(x)</p>
+<p>-&gt; fc(x) if fc</p>
+<dl class="method">
+<dt id="NvTK.Modules.Residual.ResNet.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Residual.html#ResNet.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Residual.ResNet.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Modules.Residual.ResidualNet">
+<code class="descclassname">NvTK.Modules.Residual.</code><code class="descname">ResidualNet</code><span class="sig-paren">(</span><em>network_type</em>, <em>depth</em>, <em>num_classes</em>, <em>att_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Residual.html#ResidualNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Residual.ResidualNet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Modules.SeqEmbed">
+<span id="nvtk-modules-seqembed-module"></span><h2>NvTK.Modules.SeqEmbed module<a class="headerlink" href="#module-NvTK.Modules.SeqEmbed" title="Permalink to this headline">¶</a></h2>
+<p>Sequence Embedding module in NvTK.
+This module provides</p>
+<ol class="arabic simple">
+<li><cite>BasicConvEmbed</cite> class - Basic Convolutional Embedding Module (1d)</li>
+<li><cite>RevCompConvEmbed</cite> class - Convolutional Embedding Module considering Reverse-Complement Sequence</li>
+<li><cite>CharConvModule</cite> class - Wide and shallow Charactor-level Convolution Module</li>
+</ol>
+<p>and supporting methods.</p>
+<dl class="class">
+<dt id="NvTK.Modules.SeqEmbed.BasicConvEmbed">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.SeqEmbed.</code><code class="descname">BasicConvEmbed</code><span class="sig-paren">(</span><em>out_planes</em>, <em>kernel_size=3</em>, <em>in_planes=4</em>, <em>conv_args={'dilation': 1</em>, <em>'groups': 1</em>, <em>'padding': 0</em>, <em>'stride': 1}</em>, <em>bn=False</em>, <em>activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em>activation_args={}</em>, <em>pool=&lt;class 'torch.nn.modules.pooling.AvgPool1d'&gt;</em>, <em>pool_args={'kernel_size': 3}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/SeqEmbed.html#BasicConvEmbed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.SeqEmbed.BasicConvEmbed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Basic Convolutional Embedding Module in NvTK.
+Embed Sequence using Convolution Layer.</p>
+<dl class="docutils">
+<dt>in_planes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of input channels</dd>
+<dt>out_planes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of output channels produced by the convolution</dd>
+<dt>kernel_size <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Size of the convolving kernel</dd>
+<dt>conv_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Other convolutional args, Default is dict().
+Will be pass to <cite>torch.nn.Conv1d(**conv_args)</cite>
+(e.g. <cite>conv_args={‘dilation’:1}</cite>)</dd>
+<dt>bn <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether to use BatchNorm1d, Default is True.</dd>
+<dt>activation <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module, optional</span></dt>
+<dd>Activation Module, Default is nn.ReLU.</dd>
+<dt>activation_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Other activation args, Default is dict().
+Will be pass to <cite>activation(**activation_args)</cite>
+(e.g. <cite>activation=nn.LeakyReLU, activation_args={‘p’:0.2}</cite>)</dd>
+<dt>dropout <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether to use Dropout, Default is True.</dd>
+<dt>dropout_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Dropout args, Default is {‘p’:0.5}.
+Will be pass to <cite>nn.Dropout(**dropout_args)</cite> if dropout
+(e.g. <cite>dropout=True, dropout_args={‘p’:0.5}</cite>)</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module, optional</span></dt>
+<dd>Pool Module (1d), Default is nn.AvgPool1d.</dd>
+<dt>pool_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Other pool args, Default is {‘kernel_size’: 3}.
+Will be pass to <cite>pool(**pool_args)</cite>
+(e.g. <cite>pool=nn.AvgPool1d, pool_args={‘kernel_size’: 3}</cite>)</dd>
+</dl>
+<p>in_channels : int</p>
+<p>out_channels : int</p>
+<dl class="docutils">
+<dt>conv <span class="classifier-delimiter">:</span> <span class="classifier">nn.Conv1d</span></dt>
+<dd>The convolutional neural network component of the model.</dd>
+<dt>bn <span class="classifier-delimiter">:</span> <span class="classifier">nn.BatchNorm1d</span></dt>
+<dd>The Batch Normalization</dd>
+<dt>activation <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module</span></dt>
+<dd>The activation Module</dd>
+<dt>dropout <span class="classifier-delimiter">:</span> <span class="classifier">nn.Dropout</span></dt>
+<dd>The Dropout Module</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module</span></dt>
+<dd>The pool Module</dd>
+</dl>
+<p>-&gt; conv(x)</p>
+<p>-&gt; bn(x) if bn</p>
+<p>-&gt; activation(x) if activation</p>
+<p>-&gt; dropout(x) if dropout</p>
+<p>-&gt; pool(x) if pool</p>
+<dl class="method">
+<dt id="NvTK.Modules.SeqEmbed.BasicConvEmbed.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/SeqEmbed.html#BasicConvEmbed.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.SeqEmbed.BasicConvEmbed.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.SeqEmbed.RevComp">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.SeqEmbed.</code><code class="descname">RevComp</code><a class="reference internal" href="_modules/NvTK/Modules/SeqEmbed.html#RevComp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.SeqEmbed.RevComp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Reverse Complement of onehot Sequence</p>
+<dl class="method">
+<dt id="NvTK.Modules.SeqEmbed.RevComp.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/SeqEmbed.html#RevComp.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.SeqEmbed.RevComp.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.SeqEmbed.RevCompConvEmbed">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.SeqEmbed.</code><code class="descname">RevCompConvEmbed</code><span class="sig-paren">(</span><em>out_planes</em>, <em>kernel_size=3</em>, <em>in_planes=4</em>, <em>conv_args={'dilation': 1</em>, <em>'groups': 1</em>, <em>'padding': 0</em>, <em>'stride': 1}</em>, <em>bn=False</em>, <em>activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em>activation_args={}</em>, <em>pool=&lt;class 'torch.nn.modules.pooling.AvgPool1d'&gt;</em>, <em>pool_args={'kernel_size': 3}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/SeqEmbed.html#RevCompConvEmbed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.SeqEmbed.RevCompConvEmbed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Reverse Complement Convolutional Embedding Module in NvTK.
+Embed Sequence and Reverse Complement Sequence using Convolution Layer.</p>
+<dl class="docutils">
+<dt>in_planes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of input channels</dd>
+<dt>out_planes <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of output channels produced by the convolution</dd>
+<dt>kernel_size <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd>Size of the convolving kernel</dd>
+<dt>conv_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Other convolutional args, Default is dict().
+Will be pass to <cite>torch.nn.Conv1d(**conv_args)</cite>
+(e.g. <cite>conv_args={‘dilation’:1}</cite>)</dd>
+<dt>bn <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether to use BatchNorm1d, Default is True.</dd>
+<dt>activation <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module, optional</span></dt>
+<dd>Activation Module, Default is nn.ReLU.</dd>
+<dt>activation_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Other activation args, Default is dict().
+Will be pass to <cite>activation(**activation_args)</cite>
+(e.g. <cite>activation=nn.LeakyReLU, activation_args={‘p’:0.2}</cite>)</dd>
+<dt>dropout <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether to use Dropout, Default is True.</dd>
+<dt>dropout_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Dropout args, Default is {‘p’:0.5}.
+Will be pass to <cite>nn.Dropout(**dropout_args)</cite> if dropout
+(e.g. <cite>dropout=True, dropout_args={‘p’:0.5}</cite>)</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module, optional</span></dt>
+<dd>Pool Module (1d), Default is nn.AvgPool1d.</dd>
+<dt>pool_args <span class="classifier-delimiter">:</span> <span class="classifier">dict, optional</span></dt>
+<dd>Other pool args, Default is {‘kernel_size’: 3}.
+Will be pass to <cite>pool(**pool_args)</cite>
+(e.g. <cite>pool=nn.AvgPool1d, pool_args={‘kernel_size’: 3}</cite>)</dd>
+</dl>
+<dl class="docutils">
+<dt>RevCompConvEmbed <span class="classifier-delimiter">:</span> <span class="classifier">BasicConvEmbed</span></dt>
+<dd>Basic Convolutional Embedding Module in NvTK</dd>
+<dt>RevComp <span class="classifier-delimiter">:</span> <span class="classifier">nn.Module</span></dt>
+<dd>Reverse Complement of onehot Sequence</dd>
+</dl>
+<p>-&gt; x1 = RevComp(x)</p>
+<p>-&gt; x1 = RevCompConvEmbed(x1)</p>
+<p>-&gt; x2 = RevCompConvEmbed(x)</p>
+<p>-&gt; x1 + x2</p>
+<dl class="method">
+<dt id="NvTK.Modules.SeqEmbed.RevCompConvEmbed.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/SeqEmbed.html#RevCompConvEmbed.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.SeqEmbed.RevCompConvEmbed.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.SeqEmbed.CharConvModule">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.SeqEmbed.</code><code class="descname">CharConvModule</code><span class="sig-paren">(</span><em>numFiltersConv1=40</em>, <em>filterLenConv1=5</em>, <em>numFiltersConv2=44</em>, <em>filterLenConv2=15</em>, <em>numFiltersConv3=44</em>, <em>filterLenConv3=25</em>, <em>bn=False</em>, <em>activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em>activation_args={}</em>, <em>pool=&lt;class 'torch.nn.modules.pooling.AvgPool1d'&gt;</em>, <em>pool_args={'kernel_size': 3}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/SeqEmbed.html#CharConvModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.SeqEmbed.CharConvModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Embed Sequence using wide and shallow CharConvolution Layer.</p>
+<dl class="method">
+<dt id="NvTK.Modules.SeqEmbed.CharConvModule.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/SeqEmbed.html#CharConvModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.SeqEmbed.CharConvModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Modules.Transformer">
+<span id="nvtk-modules-transformer-module"></span><h2>NvTK.Modules.Transformer module<a class="headerlink" href="#module-NvTK.Modules.Transformer" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>References<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>&#64;misc{<a class="reference external" href="https://doi.org/10.48550/arxiv.1706.03762">https://doi.org/10.48550/arxiv.1706.03762</a>,</dt>
+<dd>doi = {10.48550/ARXIV.1706.03762},
+url = {<a class="reference external" href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a>},
+author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, Lukasz and Polosukhin, Illia},
+keywords = {Computation and Language (cs.CL), Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
+title = {Attention Is All You Need},
+publisher = {arXiv},
+year = {2017},
+copyright = {arXiv.org perpetual, non-exclusive license}</dd>
+</dl>
+<p>}</p>
+<dl class="docutils">
+<dt>&#64;inproceedings{wolf-etal-2020-transformers,</dt>
+<dd>title = “Transformers: State-of-the-Art Natural Language Processing”,
+author = “Thomas Wolf and Lysandre Debut and Victor Sanh and Julien Chaumond and Clement Delangue and Anthony Moi and Pierric Cistac and Tim Rault and Rémi Louf and Morgan Funtowicz and Joe Davison and Sam Shleifer and Patrick von Platen and Clara Ma and Yacine Jernite and Julien Plu and Canwen Xu and Teven Le Scao and Sylvain Gugger and Mariama Drame and Quentin Lhoest and Alexander M. Rush”,
+booktitle = “Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: System Demonstrations”,
+month = oct,
+year = “2020”,
+address = “Online”,
+publisher = “Association for Computational Linguistics”,
+url = “<a class="reference external" href="https://www.aclweb.org/anthology/2020.emnlp-demos.6">https://www.aclweb.org/anthology/2020.emnlp-demos.6</a>”,
+pages = “38–45”</dd>
+</dl>
+<p>}</p>
+<dl class="class">
+<dt id="NvTK.Modules.Transformer.EncoderLayer">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.Transformer.</code><code class="descname">EncoderLayer</code><span class="sig-paren">(</span><em>d_model</em>, <em>n_heads</em>, <em>p_drop</em>, <em>d_ff</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#EncoderLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.EncoderLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="NvTK.Modules.Transformer.EncoderLayer.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>inputs</em>, <em>attn_mask</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#EncoderLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.EncoderLayer.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.Transformer.MultiHeadAttention">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.Transformer.</code><code class="descname">MultiHeadAttention</code><span class="sig-paren">(</span><em>d_model</em>, <em>n_heads</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#MultiHeadAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.MultiHeadAttention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="NvTK.Modules.Transformer.MultiHeadAttention.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>Q</em>, <em>K</em>, <em>V</em>, <em>attn_mask</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#MultiHeadAttention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.MultiHeadAttention.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.Transformer.PositionWiseFeedForwardNetwork">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.Transformer.</code><code class="descname">PositionWiseFeedForwardNetwork</code><span class="sig-paren">(</span><em>d_model</em>, <em>d_ff</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#PositionWiseFeedForwardNetwork"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.PositionWiseFeedForwardNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="NvTK.Modules.Transformer.PositionWiseFeedForwardNetwork.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>inputs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#PositionWiseFeedForwardNetwork.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.PositionWiseFeedForwardNetwork.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.Transformer.ScaledDotProductAttention">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.Transformer.</code><code class="descname">ScaledDotProductAttention</code><span class="sig-paren">(</span><em>d_k</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#ScaledDotProductAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.ScaledDotProductAttention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="NvTK.Modules.Transformer.ScaledDotProductAttention.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>q</em>, <em>k</em>, <em>v</em>, <em>attn_mask</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#ScaledDotProductAttention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.ScaledDotProductAttention.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NvTK.Modules.Transformer.TransformerEncoder">
+<em class="property">class </em><code class="descclassname">NvTK.Modules.Transformer.</code><code class="descname">TransformerEncoder</code><span class="sig-paren">(</span><em>seq_len</em>, <em>vocab_size=4</em>, <em>d_model=512</em>, <em>n_layers=6</em>, <em>n_heads=8</em>, <em>p_drop=0.1</em>, <em>d_ff=2048</em>, <em>pad_id=tensor([0.</em>, <em>0.</em>, <em>0.</em>, <em>0.])</em>, <em>embedding=None</em>, <em>embedding_weight=None</em>, <em>fix_embedding=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#TransformerEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.TransformerEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#NvTK.Modules.BasicModule.BasicModule" title="NvTK.Modules.BasicModule.BasicModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">NvTK.Modules.BasicModule.BasicModule</span></code></a></p>
+<p>Transformer Encoder in NvTK. 
+TransformerEncoder is a stack of MultHeadAttention encoder layers.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>vocab_size (int)    : vocabulary size (vocabulary: collection mapping token to numerical identifiers)
+seq_len    (int)    : input sequence length
+d_model    (int)    : number of expected features in the input
+n_layers   (int)    : number of sub-encoder-layers in the encoder
+n_heads    (int)    : number of heads in the multiheadattention models
+p_drop     (float)  : dropout value
+d_ff       (int)    : dimension of the feedforward network model
+pad_id     (int)    : pad token id</dd>
+</dl>
+<p>Examples:
+&gt;&gt;&gt; encoder = TransformerEncoder(vocab_size=1000, seq_len=512)
+&gt;&gt;&gt; inp = torch.arange(512).repeat(2, )
+&gt;&gt;&gt; encoder(inp)</p>
+<dl class="method">
+<dt id="NvTK.Modules.Transformer.TransformerEncoder.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>inputs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#TransformerEncoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.TransformerEncoder.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.Transformer.TransformerEncoder.get_attention">
+<code class="descname">get_attention</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#TransformerEncoder.get_attention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.TransformerEncoder.get_attention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the attention weights of Transformer Encoder</p>
+<dl class="docutils">
+<dt>Return:</dt>
+<dd>attention_weights (torch.FloatTensor)  :    attention weights</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.Transformer.TransformerEncoder.get_attention_padding_mask">
+<code class="descname">get_attention_padding_mask</code><span class="sig-paren">(</span><em>q</em>, <em>k</em>, <em>pad_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#TransformerEncoder.get_attention_padding_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.TransformerEncoder.get_attention_padding_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mask Attention Padding.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>q   (torch.Tensor) : query tensor
+k   (torch.Tensor) : key tensor
+pad_id  (int)   : pad token id</dd>
+<dt>Return:</dt>
+<dd>attn_pad_mask (torch.BoolTensor)  :   Attention Padding Masks</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NvTK.Modules.Transformer.TransformerEncoder.get_sinusoid_table">
+<code class="descname">get_sinusoid_table</code><span class="sig-paren">(</span><em>seq_len</em>, <em>d_model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Modules/Transformer.html#TransformerEncoder.get_sinusoid_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Modules.Transformer.TransformerEncoder.get_sinusoid_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sinusoid Position encoding table in transformer.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>seq_len   (int) : sequence length
+d_model   (int) : model dimension</dd>
+<dt>Return:</dt>
+<dd>sinusoid_table (torch.FloatTensor)  :   Sinusoid Position encoding table</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-NvTK.Modules">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-NvTK.Modules" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

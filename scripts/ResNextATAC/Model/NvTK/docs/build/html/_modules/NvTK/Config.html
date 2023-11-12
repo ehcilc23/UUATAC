@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK.Config &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+          <li><a href="../NvTK.html">NvTK</a> &raquo;</li>
+      <li>NvTK.Config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NvTK.Config</h1><div class="highlight"><pre>
+<span></span><span class="c1"># TODO whether to define pipeline module like sklearn</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">import</span> <span class="nn">NvTK</span>
+<span class="kn">from</span> <span class="nn">NvTK.Data.Dataset</span> <span class="kn">import</span> <span class="n">generate_dataloader_from_datasets</span>
+
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">optim</span>
+
+
+<div class="viewcode-block" id="load_config_from_json"><a class="viewcode-back" href="../../NvTK.html#NvTK.Config.load_config_from_json">[docs]</a><span class="k">def</span> <span class="nf">load_config_from_json</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="dump_config_to_json"><a class="viewcode-back" href="../../NvTK.html#NvTK.Config.dump_config_to_json">[docs]</a><span class="k">def</span> <span class="nf">dump_config_to_json</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s1">&#39;config_dump.json&#39;</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="generate_dataloader_from_config"><a class="viewcode-back" href="../../NvTK.html#NvTK.Config.generate_dataloader_from_config">[docs]</a><span class="k">def</span> <span class="nf">generate_dataloader_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="n">data_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;h5Dataset&#39;</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;fpath&#39;</span><span class="p">]</span>
+    <span class="n">train_loader</span><span class="p">,</span> <span class="n">validate_loader</span><span class="p">,</span> <span class="n">test_loader</span> <span class="o">=</span> <span class="n">generate_dataloader_from_datasets</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">validate_loader</span><span class="p">,</span> <span class="n">test_loader</span></div>
+
+
+<div class="viewcode-block" id="parse_model_args"><a class="viewcode-back" href="../../NvTK.html#NvTK.Config.parse_model_args">[docs]</a><span class="k">def</span> <span class="nf">parse_model_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;help-function of get_model_from_config&#39;&#39;&#39;</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pool&quot;</span><span class="p">,</span> <span class="s2">&quot;activation&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+                <span class="n">args</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">NvTK</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+                <span class="n">args</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">NvTK</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;model args[</span><span class="si">%s</span><span class="s2">]=</span><span class="si">%s</span><span class="s2"> not valid!&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="k">return</span> <span class="n">args</span></div>
+
+<div class="viewcode-block" id="get_model_from_config"><a class="viewcode-back" href="../../NvTK.html#NvTK.Config.get_model_from_config">[docs]</a><span class="k">def</span> <span class="nf">get_model_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="n">model_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;CNN&#39;</span><span class="p">)</span>
+    <span class="n">model_args</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;args&#39;</span><span class="p">]</span>
+    <span class="n">model_args</span> <span class="o">=</span> <span class="n">parse_model_args</span><span class="p">(</span><span class="n">model_args</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">NvTK</span><span class="p">,</span> <span class="n">model_type</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">NvTK</span><span class="p">,</span> <span class="n">model_type</span><span class="p">)(</span><span class="o">**</span><span class="n">model_args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="get_optimizer_from_config"><a class="viewcode-back" href="../../NvTK.html#NvTK.Config.get_optimizer_from_config">[docs]</a><span class="k">def</span> <span class="nf">get_optimizer_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;optimizer&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">optimizer_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;optimizer&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;optimizer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;lr&quot;</span><span class="p">:</span><span class="mf">1e-4</span><span class="p">})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">optimizer_type</span> <span class="o">=</span> <span class="s1">&#39;Adam&#39;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;lr&quot;</span><span class="p">:</span><span class="mf">1e-4</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">optim</span><span class="p">,</span> <span class="n">optimizer_type</span><span class="p">):</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">optim</span><span class="p">,</span> <span class="n">optimizer_type</span><span class="p">)(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">optimizer</span></div>
+
+
+<div class="viewcode-block" id="get_criterion_from_config"><a class="viewcode-back" href="../../NvTK.html#NvTK.Config.get_criterion_from_config">[docs]</a><span class="k">def</span> <span class="nf">get_criterion_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;criterion&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">criterion_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;criterion&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;criterion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;tasktype&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span><span class="p">:</span>
+            <span class="n">criterion_type</span> <span class="o">=</span> <span class="s1">&#39;MSELoss&#39;</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">criterion_type</span> <span class="o">=</span> <span class="s1">&#39;BCELoss&#39;</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span> <span class="n">criterion_type</span><span class="p">):</span>
+        <span class="n">criterion</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span> <span class="n">criterion_type</span><span class="p">)(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">NvTK</span><span class="o">.</span><span class="n">Modules</span><span class="o">.</span><span class="n">Loss</span><span class="p">,</span> <span class="n">criterion_type</span><span class="p">):</span>
+        <span class="n">criterion</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">NvTK</span><span class="o">.</span><span class="n">Modules</span><span class="o">.</span><span class="n">Loss</span><span class="p">,</span> <span class="n">criterion_type</span><span class="p">)(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">criterion</span></div>
+
+
+<div class="viewcode-block" id="parse_trainer_args"><a class="viewcode-back" href="../../NvTK.html#NvTK.Config.parse_trainer_args">[docs]</a><span class="k">def</span> <span class="nf">parse_trainer_args</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="n">trainer_args</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s2">&quot;trainer&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;args&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">]:</span>
+            <span class="n">trainer_args</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;args&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">trainer_args</span></div>
+
+
+<div class="viewcode-block" id="parse_modes_from_config"><a class="viewcode-back" href="../../NvTK.html#NvTK.Config.parse_modes_from_config">[docs]</a><span class="k">def</span> <span class="nf">parse_modes_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;modes&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;modes&#39;</span><span class="p">]]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;hpo&quot;</span><span class="p">,</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;evaluate&quot;</span><span class="p">,</span> <span class="s2">&quot;explain&quot;</span><span class="p">]</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

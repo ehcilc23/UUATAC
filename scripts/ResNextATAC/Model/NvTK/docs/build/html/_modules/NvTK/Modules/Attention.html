@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK.Modules.Attention &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../../NvTK.html">NvTK</a> &raquo;</li>
+      <li>NvTK.Modules.Attention</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NvTK.Modules.Attention</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    [1](https://arxiv.org/abs/1410.5401)</span>
+<span class="sd">        @article{graves2014neural,</span>
+<span class="sd">          title={Neural turing machines},</span>
+<span class="sd">          author={Graves, Alex and Wayne, Greg and Danihelka, Ivo},</span>
+<span class="sd">          journal={arXiv preprint arXiv:1410.5401},</span>
+<span class="sd">          year={2014}</span>
+<span class="sd">        }</span>
+<span class="sd">    [2](https://arxiv.org/abs/1503.08895)</span>
+<span class="sd">        @inproceedings{sukhbaatar2015end,</span>
+<span class="sd">            title={End-to-end memory networks},</span>
+<span class="sd">            author={Sukhbaatar, Sainbayar and Weston, Jason and Fergus, Rob and others},</span>
+<span class="sd">            booktitle={Advances in neural information processing systems},</span>
+<span class="sd">            pages={2440--2448},</span>
+<span class="sd">            year={2015}</span>
+<span class="sd">        }</span>
+<span class="sd">    [3](https://distill.pub/2016/augmented-rnns/)</span>
+<span class="sd">        @article{olah2016attention,</span>
+<span class="sd">            title={Attention and augmented recurrent neural networks},</span>
+<span class="sd">            author={Olah, Chris and Carter, Shan},</span>
+<span class="sd">            journal={Distill},</span>
+<span class="sd">            volume={1},</span>
+<span class="sd">            number={9},</span>
+<span class="sd">            pages={e1},</span>
+<span class="sd">            year={2016}</span>
+<span class="sd">        }</span>
+<span class="sd">    [4](https://arxiv.org/abs/1409.0473)</span>
+<span class="sd">        @article{bahdanau2014neural,</span>
+<span class="sd">            title={Neural machine translation by jointly learning to align and translate},</span>
+<span class="sd">            author={Bahdanau, Dzmitry and Cho, Kyunghyun and Bengio, Yoshua},</span>
+<span class="sd">            journal={arXiv preprint arXiv:1409.0473},</span>
+<span class="sd">            year={2014}</span>
+<span class="sd">        }</span>
+<span class="sd">    [5](https://arxiv.org/abs/1506.03134)</span>
+<span class="sd">        @inproceedings{vinyals2015pointer,</span>
+<span class="sd">            title={Pointer networks},</span>
+<span class="sd">            author={Vinyals, Oriol and Fortunato, Meire and Jaitly, Navdeep},</span>
+<span class="sd">            booktitle={Advances in Neural Information Processing Systems},</span>
+<span class="sd">            pages={2692--2700},</span>
+<span class="sd">            year={2015}</span>
+<span class="sd">        }</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="c1"># Code:   https://github.com/thomlake/pytorch-attention/blob/master/attention/attention.py</span>
+
+<span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="kn">from</span> <span class="nn">torch.nn.functional</span> <span class="kn">import</span> <span class="n">sigmoid</span><span class="p">,</span> <span class="n">softmax</span>
+
+
+<div class="viewcode-block" id="mask3d"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.Attention.mask3d">[docs]</a><span class="k">def</span> <span class="nf">mask3d</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">sizes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mask entries in value with 0 based on sizes.</span>
+<span class="sd">    Args</span>
+<span class="sd">    ----</span>
+<span class="sd">    value: Tensor of size (B, N, D)</span>
+<span class="sd">        Tensor to be masked. </span>
+<span class="sd">    sizes: list of int</span>
+<span class="sd">        List giving the number of valid values for each item</span>
+<span class="sd">        in the batch. Positions beyond each size will be masked.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    value:</span>
+<span class="sd">        Masked value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">v_mask</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">v_unmask</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="n">v_unmask</span><span class="p">)</span> <span class="c1">#(B, N, D)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sizes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">size</span><span class="p">:,:]</span> <span class="o">=</span> <span class="n">v_mask</span>
+    <span class="k">return</span> <span class="n">Variable</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="o">*</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="fill_context_mask"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.Attention.fill_context_mask">[docs]</a><span class="k">def</span> <span class="nf">fill_context_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">sizes</span><span class="p">,</span> <span class="n">v_mask</span><span class="p">,</span> <span class="n">v_unmask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Fill attention mask inplace for a variable length context.</span>
+<span class="sd">    Args</span>
+<span class="sd">    ----</span>
+<span class="sd">    mask: Tensor of size (B, N, D)</span>
+<span class="sd">        Tensor to fill with mask values. </span>
+<span class="sd">    sizes: list[int]</span>
+<span class="sd">        List giving the size of the context for each item in</span>
+<span class="sd">        the batch. Positions beyond each size will be masked.</span>
+<span class="sd">    v_mask: float</span>
+<span class="sd">        Value to use for masked positions.</span>
+<span class="sd">    v_unmask: float</span>
+<span class="sd">        Value to use for unmasked positions.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mask:</span>
+<span class="sd">        Filled with values in {v_mask, v_unmask}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mask</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="n">v_unmask</span><span class="p">)</span>
+    <span class="n">n_context</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sizes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="n">n_context</span><span class="p">:</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">size</span><span class="p">:]</span> <span class="o">=</span> <span class="n">v_mask</span>
+    <span class="k">return</span> <span class="n">mask</span></div>
+
+
+<div class="viewcode-block" id="dot"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.Attention.dot">[docs]</a><span class="k">def</span> <span class="nf">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the dot product between pairs of vectors in 3D Variables.</span>
+<span class="sd">    </span>
+<span class="sd">    Args</span>
+<span class="sd">    ----</span>
+<span class="sd">    a: Variable of size (B, M, D)</span>
+<span class="sd">    b: Variable of size (B, N, D)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    c: Variable of size (B, M, N)</span>
+<span class="sd">        c[i,j,k] = dot(a[i,j], b[i,k])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="attend"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.Attention.attend">[docs]</a><span class="k">def</span> <span class="nf">attend</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="s1">&#39;dot&#39;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span>
+           <span class="n">context_sizes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">context_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_weight</span><span class="o">=</span><span class="kc">False</span>
+           <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Attend to value (or context) by scoring each query and context.</span>
+<span class="sd">    Args</span>
+<span class="sd">    ----</span>
+<span class="sd">    query: Variable of size (B, M, D1)</span>
+<span class="sd">        Batch of M query vectors.</span>
+<span class="sd">    context: Variable of size (B, N, D2)</span>
+<span class="sd">        Batch of N context vectors.</span>
+<span class="sd">    value: Variable of size (B, N, P), default=None</span>
+<span class="sd">        If given, the output vectors will be weighted</span>
+<span class="sd">        combinations of the value vectors.</span>
+<span class="sd">        Otherwise, the context vectors will be used.</span>
+<span class="sd">    score: str or callable, default=&#39;dot&#39;</span>
+<span class="sd">        If score == &#39;dot&#39;, scores are computed</span>
+<span class="sd">        as the dot product between context and</span>
+<span class="sd">        query vectors. This Requires D1 == D2.</span>
+<span class="sd">        Otherwise, score should be a callable:</span>
+<span class="sd">             query    context     score</span>
+<span class="sd">            (B,M,D1) (B,N,D2) -&gt; (B,M,N)</span>
+<span class="sd">    normalize: str, default=&#39;softmax&#39;</span>
+<span class="sd">        One of &#39;softmax&#39;, &#39;sigmoid&#39;, or &#39;identity&#39;.</span>
+<span class="sd">        Name of function used to map scores to weights.</span>
+<span class="sd">    context_mask: Tensor of (B, M, N), default=None</span>
+<span class="sd">        A Tensor used to mask context. Masked</span>
+<span class="sd">        and unmasked entries should be filled </span>
+<span class="sd">        appropriately for the normalization function.</span>
+<span class="sd">    context_sizes: list[int], default=None,</span>
+<span class="sd">        List giving the size of context for each item</span>
+<span class="sd">        in the batch and used to compute a context_mask.</span>
+<span class="sd">        If context_mask or context_sizes are not given,</span>
+<span class="sd">        context is assumed to have fixed size.</span>
+<span class="sd">    return_weight: bool, default=False</span>
+<span class="sd">        If True, return the attention weight Tensor.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    output: Variable of size (B, M, P)</span>
+<span class="sd">        If return_weight is False.</span>
+<span class="sd">    weight, output: Variable of size (B, M, N), Variable of size (B, M, P)</span>
+<span class="sd">        If return_weight is True.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    About</span>
+<span class="sd">    -----</span>
+<span class="sd">    Attention is used to focus processing on a particular region of input.</span>
+<span class="sd">    This function implements the most common attention mechanism [1, 2, 3],</span>
+<span class="sd">    which produces an output by taking a weighted combination of value vectors</span>
+<span class="sd">    with weights from by a scoring function operating over pairs of query and</span>
+<span class="sd">    context vectors.</span>
+<span class="sd">    Given query vector `q`, context vectors `c_1,...,c_n`, and value vectors</span>
+<span class="sd">    `v_1,...,v_n` the attention score of `q` with `c_i` is given by</span>
+<span class="sd">        s_i = f(q, c_i)</span>
+<span class="sd">    Frequently, `f` is given by the dot product between query and context vectors.</span>
+<span class="sd">        s_i = q^T c_i</span>
+<span class="sd">    The scores are passed through a normalization functions g.</span>
+<span class="sd">    This is normally the softmax function.</span>
+<span class="sd">        w_i = g(s_1,...,s_n)_i</span>
+<span class="sd">    Finally, the output is computed as a weighted</span>
+<span class="sd">    combination of the values with the normalized scores.</span>
+<span class="sd">        z = sum_{i=1}^n w_i * v_i</span>
+<span class="sd">    In many applications [4, 5] the context and value vectors are the same, `v_i = c_i`.</span>
+<span class="sd">    Sizes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This function accepts batches of size `B` containing</span>
+<span class="sd">    `M` query vectors of dimension `D1`,</span>
+<span class="sd">    `N` context vectors of dimension `D2`, </span>
+<span class="sd">    and optionally `N` value vectors of dimension `P`.</span>
+<span class="sd">    Variable Length Contexts</span>
+<span class="sd">    ------------------------    </span>
+<span class="sd">    If the number of context vectors varies within a batch, a context</span>
+<span class="sd">    can be ignored by forcing the corresponding weight to be zero.</span>
+<span class="sd">    In the case of the softmax, this can be achieved by adding negative</span>
+<span class="sd">    infinity to the corresponding score before normalization.</span>
+<span class="sd">    Similarly, for elementwise normalization functions the weights can</span>
+<span class="sd">    be multiplied by an appropriate {0,1} mask after normalization.</span>
+<span class="sd">    To facilitate the above behavior, a context mask, with entries</span>
+<span class="sd">    in `{-inf, 0}` or `{0, 1}` depending on the normalization function,</span>
+<span class="sd">    can be passed to this function. The masks should have size `(B, M, N)`.</span>
+<span class="sd">    Alternatively, a list can be passed giving the size of the context for</span>
+<span class="sd">    each item in the batch. Appropriate masks will be created from these lists.</span>
+<span class="sd">    Note that the size of output does not depend on the number of context vectors.</span>
+<span class="sd">    Because of this, context positions are truly unaccounted for in the output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">q</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">query</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">c</span>
+
+    <span class="n">batch_size_q</span><span class="p">,</span> <span class="n">n_q</span><span class="p">,</span> <span class="n">dim_q</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+    <span class="n">batch_size_c</span><span class="p">,</span> <span class="n">n_c</span><span class="p">,</span> <span class="n">dim_c</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+    <span class="n">batch_size_v</span><span class="p">,</span> <span class="n">n_v</span><span class="p">,</span> <span class="n">dim_v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">batch_size_q</span> <span class="o">==</span> <span class="n">batch_size_c</span> <span class="o">==</span> <span class="n">batch_size_v</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;batch size mismatch (query: </span><span class="si">{}</span><span class="s1">, context: </span><span class="si">{}</span><span class="s1">, value: </span><span class="si">{}</span><span class="s1">)&#39;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">c</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">v</span><span class="o">.</span><span class="n">size</span><span class="p">()))</span>
+
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size_q</span>
+
+    <span class="c1"># Compute scores</span>
+    <span class="k">if</span> <span class="n">score</span> <span class="o">==</span> <span class="s1">&#39;dot&#39;</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">callable</span><span class="p">(</span><span class="n">score</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;unknown score function: </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Normalize scores and mask contexts</span>
+    <span class="k">if</span> <span class="n">normalize</span> <span class="o">==</span> <span class="s1">&#39;softmax&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">context_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">context_mask</span> <span class="o">+</span> <span class="n">s</span>
+
+        <span class="k">elif</span> <span class="n">context_sizes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">context_mask</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">n_q</span><span class="p">,</span> <span class="n">n_c</span><span class="p">)</span>
+            <span class="n">context_mask</span> <span class="o">=</span> <span class="n">fill_context_mask</span><span class="p">(</span><span class="n">context_mask</span><span class="p">,</span>
+                                             <span class="n">sizes</span><span class="o">=</span><span class="n">context_sizes</span><span class="p">,</span>
+                                             <span class="n">v_mask</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span>
+                                             <span class="n">v_unmask</span><span class="o">=</span><span class="mi">0</span>
+                                             <span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">context_mask</span> <span class="o">+</span> <span class="n">s</span>
+
+        <span class="n">s_flat</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span> <span class="o">*</span> <span class="n">n_q</span><span class="p">,</span> <span class="n">n_c</span><span class="p">)</span>
+        <span class="n">w_flat</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">s_flat</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">w_flat</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">n_q</span><span class="p">,</span> <span class="n">n_c</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">normalize</span> <span class="o">==</span> <span class="s1">&#39;sigmoid&#39;</span> <span class="ow">or</span> <span class="n">normalize</span> <span class="o">==</span> <span class="s1">&#39;identity&#39;</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">if</span> <span class="n">normalize</span> <span class="o">==</span> <span class="s1">&#39;sigmoid&#39;</span> <span class="k">else</span> <span class="n">s</span>
+        <span class="k">if</span> <span class="n">context_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">context_mask</span> <span class="o">*</span> <span class="n">w</span>
+        <span class="k">elif</span> <span class="n">context_sizes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">context_mask</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">n_q</span><span class="p">,</span> <span class="n">n_c</span><span class="p">)</span>
+            <span class="n">context_mask</span> <span class="o">=</span> <span class="n">fill_context_mask</span><span class="p">(</span><span class="n">context_mask</span><span class="p">,</span>
+                                             <span class="n">sizes</span><span class="o">=</span><span class="n">context_sizes</span><span class="p">,</span>
+                                             <span class="n">v_mask</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                             <span class="n">v_unmask</span><span class="o">=</span><span class="mi">1</span>
+                                             <span class="p">)</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">context_mask</span> <span class="o">*</span> <span class="n">w</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;unknown normalize function: </span><span class="si">{</span><span class="n">normalize</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Combine</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">return_weight</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span>
+    <span class="k">return</span> <span class="n">z</span></div>
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

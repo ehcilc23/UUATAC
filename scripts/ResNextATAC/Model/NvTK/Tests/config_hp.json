@@ -1,0 +1,198 @@
+{
+    "name": "exp1",        // Project name
+  
+    "model": {
+      "type": "CNN",        // [MLP/ResNet/densnet/VAE/enas]
+      "args": {
+          "output_classes": 5,        // Args for Supervised classs
+          "is_regression": false,        //[true/false] whether running a regression
+          "multi_tasks": false        //[true/false] whether running a multi_tasks regression
+      }                
+    },
+  
+    "data_train": {        //Needed in automl.train()
+          "type": "DataLoader",        //[DataLoader/BigDataLoader] Selecting data loader, using BigDataLoader when data file is big
+          "args":{
+              "data_dir": "/autogenome/data/",        //Dataset path
+              "features_file": "little_exp.tsv",        //Features file name
+              "labels_file": "little_learning_target.tsv",        //Labels file name
+              "validation_split": 0.2,        //Size of validation dataset, float(portion) 
+              "shuffle": true,        //Shuffle training data before splitting
+              "validation_features": null,        //Validation features file name, needed when validation_split is null
+              "validation_labels": null
+          }
+      },
+  
+    "data_evaluate": {                                        //Needed in automl.evaluate()
+          "type": "DataLoader",
+          "args": {
+              "data_dir": "/autogenome/data/",
+              "features_file": "little_exp.tsv",
+              "labels_file": "little_learning_target.tsv"
+          }
+      },
+  
+    "data_predict": {        //Needed in automl.predict()
+          "type": "DataLoader",
+          "args": {
+              "data_dir": "/autogenome/data/",
+              "features_file": "little_exp.tsv"
+          }
+      },
+    
+   // ["trainer"]for MLP/ResNet/DenseNet/res-VAE
+    "trainer": {
+          "hyper_selector": true,        // Whether to use hyper_selector or not
+          "batch_size": 64,        //Batch_size
+          "save_dir": "experiments/",        // Dir to save models, logs and output files
+          "monitor": "accuracy",        // [accuracy/loss] A Tensor. Quantity to be monitored
+          "selected_mode": "max",       //[min/max] mode to select best model when monitor is bigger[max] or smaller[min]
+          "num_gpus": 1,        // Num_gpus
+          "evaluate_every_n_epochs": 1,        //Trigger the evaluation after running n epochs of training.
+          "min_delta": 0.001,        //Minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min_delta, will count as no improvement.
+          "patience": 10,        //Number of epochs with no improvement after which learning rate will be decayed.
+          "decay_lr": 10,        //Learning rate is decayed by dividing `decay_lr` when no improvement is detected.
+          "decay_min_delta": 0.001,        //Minimum change in the monitored quantity to qualify as an improvement between last monitored quantity and current monitored quantity with different learning rate.
+          "decay_patience": 1,         //Number of times with decaying learning rate after which training will be stopped.
+          "pre_train_epoch": 10,        // epoches for hyperparams tunning
+          "select_by_eval": true,         //Select best hyper-parameters by eval metric or by train metric. Default is False.
+          "max_steps": 64000,         // Steps for training, will be changed into epoches
+          "auto_batch": false,         //If True, an extra dimension of batch_size will be expanded to the first dimension of the return value from get_split. Default to True.
+          "log_every_n_steps": 10,        //Logging every n steps. Default is 10.
+          "save_model_secs": 0,    // The frequency, in seconds, that a checkpoint is saved using a default checkpoint saver.  `save_model_steps` will added. If both are provided, then only `save_model_secs` is used. Default 600.
+          "init_learning_rate": 0.0001,        // Init rate while hyperparamter search, if set `null`, the init rate will calculated automatically
+          "end_learning_rate": 0.1,        //End rate while hyperparamter search, if set `null`, the end rate will calculated automatically
+          "loss": "cross_entropy",         //["cross_entropy"/"focal_loss"] using "focal_loss" when data are class imbalanced
+          "selected_mode": "max"         //["max"/"min"]  
+      },
+   // ["trainer"] for enas
+    "trainer":{
+          "child_num_layers": 6,        // set the model layers
+          "log_every_n_steps": 10,        //Logging every n steps. Default is 10.
+          "batch_size": 512,       
+          "max_number_of_epoches_in_search": 500,        // num of epoches in search part
+          "max_number_of_epoches_in_fixed": 200,        // num of epoches to train
+          "top_k_candidates": 5,        // number of candidate saved from search and will be trained soon
+          "child_lr_reg": 1e-4,         // the parameter of l2 regularization loss
+          "max_search_channel": 1024,        // the max channel of search space      
+          "save_dir": "experiments/enas/"
+    },
+  
+  
+    "optimizer": {
+      "type": "Adam"         //[adam/sgd/adadelta/adagrad/adamw/ftrl/momentum/rmsprop/kfac/dynamic_momentum/lamb]
+    },
+  
+    // ["evaluator"] for  MLP/ResNet/DenseNet/res-VAE
+    "evaluator": {
+          "checkpoint_path": "default",         // Checkpoint_path to restore
+          "log_every_n_steps": 2,         //Logging every n steps.
+          "output_every_n_steps": 1,        // Logging output every n steps.
+          "max_number_of_steps": 100,         // The max number of steps for evaluation
+          "batch_size":64
+  
+      },
+  
+    // ["evaluator"] for  enas
+    "evaluator":{
+          "checkpoint_path": "default",
+          "log_every_n_steps": 1,
+          "output_every_n_steps": 1,
+          "max_number_of_steps": 30,
+          "batch_size": 100,
+          "arc": null         // The architecture of model, when checkpoint_path is not default
+    },
+  
+    // ["predictor"] for  MLP/ResNet/DenseNet/res-VAE
+    "predictor": {
+          "checkpoint_path": "default",
+          "log_every_n_steps": 10,
+          "output_every_n_steps": 1,
+          "max_number_of_steps": 100, 
+          "batch_size":64
+      },
+  
+     // ["predictor"] for  enas
+     "predictor": {
+          "checkpoint_path": "default",
+          "log_every_n_steps": 1,
+          "output_every_n_steps": 1,
+          "max_number_of_steps": 300,
+          "batch_size": 150,
+          "arc": null        // The architecture of model, when checkpoint_path is not default
+      },
+  
+    "param_spec": {
+          "type": "origin_params",        // The init model params before hyperparameter search 
+          "args": {
+              "MLP": {
+                  "FC1_SIZE": 512,
+                  "FC2_SIZE": 512,
+                  "FC3_SIZE": 512,
+                  "FC4_SIZE": 512,
+                  "FC5_SIZE": 512,
+                  "FC6_SIZE": 512,
+                  "keep_prob": 0.8,
+                  "output_nonlinear": null
+              },                   // MLP model params, keep_prob is set into first laryer; output_nonlinear is set at the last layer
+              "ResNet": {
+                  "n_latent": 128,
+                  "n_blocks": 2,
+                  "keep_prob": 0.8,
+                  "output_nonlinear": null
+              },                  // ResNet model params
+              "DenseNet": {
+                  "growth_rate":32,
+                  "bn_size":16,
+                  "block_config": [2, 2, 2, 2],
+                  "keep_prob": 0.8,
+                  "output_nonlinear": null
+              },                  // DenseNet model params
+              "VAE":{
+                  "keep_prob":0.6,
+                  "start_size":4096,
+                  "decay_ratio_list":[0.6, 0.8, 0.8, 0.8]
+              },                  // VAE model params
+              "optimizer_param": {
+                  "best_lr": 0.001
+              }                           // Params for optimizer_param
+          }
+      },
+  
+    "hyper_param_spec": {
+          "type": "hyper_params",         // Select the model through performance in different combination.
+          "args": {
+              "MLP": {
+                  "FC1_SIZE": [ 64, 32, 16, 8],
+                  "FC2_SIZE": [ 64, 32, 16, 8],
+                  "FC3_SIZE": [ 64, 32, 16, 8],
+                  "FC4_SIZE": [ 64, 32, 16, 8],
+                  "FC5_SIZE": [ 64, 32, 16, 8],
+                  "FC6_SIZE": [ 64, 32, 16, 8],
+                  "keep_prob": [ 0.8, 1.0],
+                  "output_nonlinear": [null, "relu", "tanh", "sigmoid"]
+              },
+              "ResNet": {
+                  "n_latent": [4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8],
+                  "n_blocks": [1, 2, 3, 5],
+                  "keep_prob": [0.2, 0.4, 0.6, 0.8, 1.0],
+                  "output_nonlinear": [null, "relu", "tanh", "sigmoid"]
+              },
+              "DenseNet": {
+                  "growth_rate": [512, 256, 128, 64, 32, 16, 8],
+                  "bn_size": [16, 32],
+                  "block_config": [[2, 3, 4], [3, 4, 5]],
+                  "keep_prob": [0.2, 0.4, 0.6, 0.8, 1.0],
+                  "output_nonlinear": [null, "relu", "tanh", "sigmoid"]
+              },
+  
+              "VAE":{
+                  "keep_prob":[0.2, 0.4, 0.6, 0.8, 1.0],
+                  "start_size":[4096, 2048, 1024, 512, 256, 128, 64, 32], 
+                  "num_layers":[4,3],
+                  "decay_ratio":[0.6, 0.5]
+              },
+              "optimizer_param": {}
+            }
+          }
+  }

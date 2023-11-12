@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK.Modules.MultiTask &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../../NvTK.html">NvTK</a> &raquo;</li>
+      <li>NvTK.Modules.MultiTask</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NvTK.Modules.MultiTask</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+
+<span class="n">LAYER_KEY</span> <span class="o">=</span> <span class="s1">&#39;layers&#39;</span>
+<span class="n">NAME_KEY</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span>
+<span class="n">ANCHOR_KEY</span> <span class="o">=</span> <span class="s1">&#39;anchor_layer&#39;</span>
+<span class="n">LOSS_KEY</span> <span class="o">=</span> <span class="s1">&#39;loss&#39;</span>
+<span class="n">LOSS_REG_KEY</span> <span class="o">=</span> <span class="s1">&#39;loss_weight&#39;</span>
+<span class="n">AUTO_WEIGHT_KEY</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span>
+<span class="n">WEIGHT_INIT_KEY</span> <span class="o">=</span> <span class="s1">&#39;loss_init_val&#39;</span>
+<span class="n">MISSING_WEIGHT_MSG</span> <span class="o">=</span> <span class="s2">&quot;Expect </span><span class="si">{0}</span><span class="s2"> for task </span><span class="si">{1}</span><span class="s2"> but none provided.&quot;</span>
+
+<div class="viewcode-block" id="MTLModel"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.MTLModel">[docs]</a><span class="k">class</span> <span class="nc">MTLModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A torch.nn.Module built from a set of shared and task specific layers</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    g : networkx.Graph</span>
+<span class="sd">        The meta-computation graph</span>
+<span class="sd">    task_layers : list</span>
+<span class="sd">        A list which holds the layers for which to build the computation graph</span>
+<span class="sd">    output_tasks : list</span>
+<span class="sd">        A list which holds the tasks for which the output should be returned</span>
+<span class="sd">    layer_names : list</span>
+<span class="sd">        A list of the names of each layer</span>
+<span class="sd">    losses : dict</span>
+<span class="sd">        A dictionary which maps the name of a layer to its loss function</span>
+<span class="sd">    loss_weights : dict</span>
+<span class="sd">        A dictionary which maps the name of a layer to the weight of its loss</span>
+<span class="sd">        function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_layers</span><span class="p">,</span> <span class="n">output_tasks</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MTLModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_layers</span> <span class="o">=</span> <span class="n">task_layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_tasks</span> <span class="o">=</span> <span class="n">output_tasks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="n">NAME_KEY</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">task_layers</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_graph</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_losses</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_loss_weights</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_initialize_losses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">losses</span> <span class="o">=</span> <span class="p">{</span><span class="n">task</span><span class="p">[</span><span class="n">NAME_KEY</span><span class="p">]:</span> <span class="n">task</span><span class="p">[</span><span class="n">LOSS_KEY</span><span class="p">]</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_layers</span> <span class="k">if</span> <span class="n">LOSS_KEY</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+
+    <span class="k">def</span> <span class="nf">_initialize_loss_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss_weights</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_layers</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_loss_weight</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_loss_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+        <span class="n">task_name</span> <span class="o">=</span> <span class="n">task</span><span class="p">[</span><span class="n">NAME_KEY</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">LOSS_REG_KEY</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">task</span><span class="p">[</span><span class="n">LOSS_REG_KEY</span><span class="p">]</span> <span class="o">==</span> <span class="n">AUTO_WEIGHT_KEY</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">WEIGHT_INIT_KEY</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>\
+                        <span class="n">MISSING_WEIGHT_MSG</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WEIGHT_INIT_KEY</span><span class="p">,</span> <span class="n">task_name</span><span class="p">)</span>
+                <span class="n">loss_weight</span> <span class="o">=</span> <span class="n">task</span><span class="p">[</span><span class="n">WEIGHT_INIT_KEY</span><span class="p">]</span>
+                <span class="n">loss_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">task_name</span><span class="si">}</span><span class="s1">_loss&#39;</span>
+                <span class="n">loss_weight</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,),</span> <span class="n">loss_weight</span><span class="p">))</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">,</span> <span class="n">loss_weight</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loss_weights</span><span class="p">[</span><span class="n">task_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loss_weights</span><span class="p">[</span><span class="n">task_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">task</span><span class="p">[</span><span class="n">LOSS_REG_KEY</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">_initialize_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_graph</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_bfs_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_node</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Here we iteratore through the graph in a BFS-fashion starting from</span>
+<span class="sd">        `start_node`, typically this is the `root` node. This node is skipped</span>
+<span class="sd">        and we pass the input data and resulting outputs from all layers foward.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_names</span><span class="p">}</span>
+
+        <span class="c1"># First node is visited</span>
+        <span class="n">queue</span> <span class="o">=</span> <span class="p">[</span><span class="n">start_node</span><span class="p">]</span>
+        <span class="n">visited</span><span class="p">[</span><span class="n">start_node</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">start_node</span><span class="p">:</span>
+                <span class="n">input_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">predecessors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                    <span class="n">l</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">input_nodes</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Feeding output from </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="si">}</span><span class="s2"> into </span><span class="si">{</span><span class="n">node</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">cur_layer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+                <span class="c1"># Get the output from the layers that serve as input</span>
+                <span class="n">output_pre_layers</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">output_complete</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">input_nodes</span><span class="p">:</span>
+                    <span class="c1"># If an output is not ready yet, because that node has not</span>
+                    <span class="c1"># been computed, we put the current node back into the queue</span>
+                    <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No output for layer </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> yet&quot;</span><span class="p">)</span>
+                        <span class="n">output_complete</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">output_pre_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">output_complete</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Putting </span><span class="si">{</span><span class="n">node</span><span class="si">}</span><span class="s2"> back into the queue.&quot;</span><span class="p">)</span>
+                    <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">cur_output</span> <span class="o">=</span> <span class="n">cur_layer</span><span class="p">(</span><span class="o">*</span><span class="n">output_pre_layers</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_output</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">successors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">visited</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">visited</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">losses</span><span class="p">,</span> <span class="n">loss_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_losses</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_tasks</span><span class="p">],</span> <span class="n">losses</span><span class="p">,</span> <span class="n">loss_weights</span>
+
+    <span class="k">def</span> <span class="nf">_get_losses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">loss_weights</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_tasks</span><span class="p">:</span>
+            <span class="n">losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+            <span class="n">loss_weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_weights</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">losses</span><span class="p">,</span> <span class="n">loss_weights</span>
+
+    <span class="k">def</span> <span class="nf">_build_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_layers</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_layer</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_graph</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_to_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">):</span>
+        <span class="n">layer_name</span> <span class="o">=</span> <span class="n">layer</span><span class="p">[</span><span class="n">NAME_KEY</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_node</span><span class="p">(</span><span class="n">layer_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;anchor_layer&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c1"># If there is no anchor layer, we expect it to be a layer which</span>
+            <span class="c1"># receives data inputs and is hence connected to the root node</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">layer_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">anchor_layer</span> <span class="o">=</span> <span class="n">layer</span><span class="p">[</span><span class="n">ANCHOR_KEY</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">anchor_layer</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">a_l_name</span> <span class="ow">in</span> <span class="n">anchor_layer</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_node</span><span class="p">(</span><span class="n">a_l_name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">a_l_name</span><span class="p">,</span> <span class="n">layer_name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add_node</span><span class="p">(</span><span class="n">anchor_layer</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">anchor_layer</span><span class="p">,</span> <span class="n">layer_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">layer_name</span> <span class="o">=</span> <span class="n">layer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">layer_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">layer_name</span> <span class="o">=</span> <span class="n">layer</span><span class="p">[</span><span class="n">NAME_KEY</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">layer_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;anchor_layer&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">layer_name</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_add_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">):</span>
+        <span class="n">layer_modules</span> <span class="o">=</span> <span class="n">layer</span><span class="p">[</span><span class="n">LAYER_KEY</span><span class="p">]</span>
+        <span class="n">layer_name_main</span> <span class="o">=</span> <span class="n">layer</span><span class="p">[</span><span class="n">NAME_KEY</span><span class="p">]</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_name_main</span><span class="p">,</span> <span class="n">layer_modules</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MTLModel.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.MTLModel.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="nb">input</span><span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bfs_forward</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ConcatenateTask"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.ConcatenateTask">[docs]</a><span class="k">class</span> <span class="nc">ConcatenateTask</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcatenateTask.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.ConcatenateTask.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="MultiTaskWrapper"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.MultiTaskWrapper">[docs]</a><span class="k">class</span> <span class="nc">MultiTaskWrapper</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub_models</span><span class="p">,</span> <span class="n">concat_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The multi-model wrapper class can be used to concatenate the</span>
+<span class="sd">        outputs of multiple models along a pre-specified axis. The wrapper</span>
+<span class="sd">        can be used to load and run multiple trained models during prediction</span>
+<span class="sd">        functions. This class should not be used for training. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sub_models : list(torch.nn.Module)</span>
+<span class="sd">            The &#39;sub-models&#39; that are used in this multi-model wrapper class.</span>
+<span class="sd">        concat_dim : int, optional</span>
+<span class="sd">            Default is 1. The dimension along which to concatenate the models&#39;</span>
+<span class="sd">            predictions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sub_models</span> <span class="o">=</span> <span class="n">sub_models</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_concat_dim</span> <span class="o">=</span> <span class="n">concat_dim</span>
+
+<div class="viewcode-block" id="MultiTaskWrapper.cuda"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.MultiTaskWrapper.cuda">[docs]</a>    <span class="k">def</span> <span class="nf">cuda</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_models</span><span class="p">:</span>
+            <span class="n">sm</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MultiTaskWrapper.eval"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.MultiTaskWrapper.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_models</span><span class="p">:</span>
+            <span class="n">sm</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MultiTaskWrapper.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.MultiTaskWrapper.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">sm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_models</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_concat_dim</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="MTLTrainer"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.MTLTrainer">[docs]</a><span class="k">class</span> <span class="nc">MTLTrainer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># train one epoch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span> <span class="o">=</span> <span class="n">criterion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
+
+<div class="viewcode-block" id="MTLTrainer.train_per_epoch"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.MTLTrainer.train_per_epoch">[docs]</a>    <span class="k">def</span> <span class="nf">train_per_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">verbose_step</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">batch_losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">target</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+            <span class="c1"># Our model will return a list of predictions (from the layers specified in `output_tasks`),</span>
+            <span class="c1"># loss functions, and regularization parameters (as defined in the tasks variable)</span>
+            <span class="n">y_hat</span><span class="p">,</span> <span class="n">l_funcs</span><span class="p">,</span> <span class="n">l_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="n">loss</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># We can now iterate over the tasks and accumulate the losses</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">anno_cnt</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+                <span class="n">loss</span> <span class="o">+=</span> <span class="n">l_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">l_funcs</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">y_hat</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">target</span><span class="p">[:,</span><span class="n">idx</span><span class="p">:</span><span class="n">idx</span><span class="o">+</span><span class="n">cnt</span><span class="p">])</span>
+                <span class="n">idx</span> <span class="o">+=</span> <span class="n">cnt</span>
+
+            <span class="c1"># self.criterion(output, target)</span>
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="n">verbose_step</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">batch_idx</span> <span class="o">%</span> <span class="n">verbose_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Train Epoch: </span><span class="si">{}</span><span class="s1"> [</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1"> (</span><span class="si">{:.0f}</span><span class="s1">%)]</span><span class="se">\t</span><span class="s1">Loss: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">epoch</span><span class="p">,</span> <span class="n">batch_idx</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">),</span>
+                        <span class="mf">100.</span> <span class="o">*</span> <span class="n">batch_idx</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="p">),</span> <span class="n">loss</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+            <span class="n">batch_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+            <span class="n">average_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">batch_losses</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">average_loss</span></div>
+
+<div class="viewcode-block" id="MTLTrainer.evaluate"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.MTLTrainer.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">eval_loader</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="n">batch_losses</span><span class="p">,</span> <span class="n">all_predictions</span><span class="p">,</span> <span class="n">all_targets</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="ow">in</span> <span class="n">eval_loader</span><span class="p">:</span>
+                <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">targets</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+                <span class="n">y_hat</span><span class="p">,</span> <span class="n">l_funcs</span><span class="p">,</span> <span class="n">l_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+
+                <span class="n">loss</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="c1"># We can now iterate over the tasks and accumulate the losses</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">anno_cnt</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+                    <span class="n">loss</span> <span class="o">+=</span> <span class="n">l_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">l_funcs</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">y_hat</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">targets</span><span class="p">[:,</span><span class="n">idx</span><span class="p">:</span><span class="n">idx</span><span class="o">+</span><span class="n">cnt</span><span class="p">])</span>
+                    <span class="n">idx</span> <span class="o">+=</span> <span class="n">cnt</span>
+
+                <span class="n">test_loss</span> <span class="o">=</span> <span class="n">loss</span>
+                <span class="n">batch_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_loss</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+
+                <span class="n">output</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">all_predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+                <span class="n">all_targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+                
+        <span class="n">average_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">batch_losses</span><span class="p">)</span>
+        <span class="n">all_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">all_predictions</span><span class="p">)</span>
+        <span class="n">all_targets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">all_targets</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">average_loss</span><span class="p">,</span> <span class="n">all_predictions</span><span class="p">,</span> <span class="n">all_targets</span></div>
+
+<div class="viewcode-block" id="MTLTrainer.get_current_model"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.MultiTask.MTLTrainer.get_current_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span></div></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

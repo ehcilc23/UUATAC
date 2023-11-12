@@ -1,0 +1,47 @@
+{
+    "name": "exp1",
+    "tasktype": "regression",
+    "outdir": "./",
+    "device": "0",
+
+    "data": {
+        "type": "h5Dataset",
+        "fpath": "./Dataset.train_test.h5"
+    },
+    
+    "model": {
+        "type": "CNN",
+        "args": {
+            "out_planes": 256,
+            "kernel_size": 15,
+            "conv_args": {"stride":1, "padding":5},
+            "bn": true,
+            "activation": "ReLU",
+            "pool": "AvgPool1d",
+            "pool_args": {"kernel_size": 3},
+            "output_size": 20,
+            "tasktype": "regression"
+        }
+    },
+
+    "optimizer":{
+        "type": "Adam",
+        "args":{"lr":1e-4}
+    },
+
+    "criterion":{"type": "BCELoss"},
+
+    "trainer": {
+        "args": {
+            "EPOCH": 500,
+            "patience": 10,
+            "use_tensorbord": true
+        }
+    },
+    
+    "modes":{
+        "train":{},
+        "evaluate":{},
+        "explain":{}
+    }
+}

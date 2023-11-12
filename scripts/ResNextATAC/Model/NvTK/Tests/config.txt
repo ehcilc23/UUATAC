@@ -1,0 +1,34 @@
+{
+    "name": "exp1",        // Project name
+  
+    "model": {
+        "type": "CNN",        // [MLP/ResNet/densnet/VAE/enas]
+        "args": {
+            "output_classes": 5,        // Args for Supervised classs
+            "is_regression": false,        //[true/false] whether running a regression
+            "multi_tasks": false        //[true/false] whether running a multi_tasks regression
+            },
+
+        "Embedding": { // The model Embedding
+            "type": "BasicConvEmbed",
+            "args": {
+                "out_planes": 128,
+                "kernel_size": 3,
+                "conv_args": {"stride":1, "padding":0},
+                "bn": true,
+                "activation": "ReLU",
+                "pool": "AvgPool1d",
+                "pool_args": {"kernel_size": 3}
+                }                   // MLP model params, keep_prob is set into first laryer; output_nonlinear is set at the last layer
+            },
+        "Encoder":{},
+        "Decoder":{},
+        "Predictor":{
+            "type": "BasicPredictor",
+            "args": {
+                "output_size": 10,
+                "tasktype": "regression"
+                }
+            }
+        }
+    }

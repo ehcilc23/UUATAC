@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK.Modules.BasicModule &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../../NvTK.html">NvTK</a> &raquo;</li>
+      <li>NvTK.Modules.BasicModule</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NvTK.Modules.BasicModule</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Basic module in NvTK.</span>
+<span class="sd">This module provides </span>
+
+<span class="sd">1.  `BasicModule` class - the general abstract class</span>
+
+<span class="sd">2.  `BasicConv1d` class - Basic Convolutional Module (1d)</span>
+
+<span class="sd">3.  `BasicRNNModule` class - Basic RNN(LSTM) Module in batch-first style</span>
+
+<span class="sd">4.  `BasicLinearModule`</span>
+
+<span class="sd">5.  `BasicPredictor` Module</span>
+
+<span class="sd">6.  `BasicLoss` Module</span>
+
+<span class="sd">and supporting methods.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BasicModule&quot;</span><span class="p">,</span> <span class="s2">&quot;BasicConv1d&quot;</span><span class="p">,</span> <span class="s2">&quot;BasicRNNModule&quot;</span><span class="p">,</span> <span class="s2">&quot;BasicLinearModule&quot;</span><span class="p">,</span> <span class="s2">&quot;BasicPredictor&quot;</span><span class="p">,</span> <span class="s2">&quot;BasicLoss&quot;</span><span class="p">,</span> <span class="s2">&quot;Flatten&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="BasicModule"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule">[docs]</a><span class="k">class</span> <span class="nc">BasicModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Basic module class in NvTK.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BasicModule</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BasicModule.initialize_weights"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule.initialize_weights">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;initialize module parameters.</span>
+
+<span class="sd">        Conv module weight will be initialize in xavier_normal_,</span>
+<span class="sd">        bias will be initialize in zero_</span>
+
+<span class="sd">        Linear module weight will be initialize in xavier_normal_,</span>
+<span class="sd">        bias will be initialize in zero_</span>
+
+<span class="sd">        BatchNorm module weight will be initialize in constant = 1,</span>
+<span class="sd">        bias will be initialize in constant = 0</span>
+
+<span class="sd">        LSTM module weight will be initialize in orthogonal_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">)):</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_normal_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span> 
+                <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">m</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;init Conv param...&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">):</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_normal_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span> 
+                <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">m</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;init Linear param...&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">)):</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;init BatchNorm param...&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">LSTM</span><span class="p">):</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">all_weights</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">all_weights</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">all_weights</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">all_weights</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;init LSTM param...&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BasicModule.initialize_weights_from_pretrained"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule.initialize_weights_from_pretrained">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_weights_from_pretrained</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pretrained_net_fname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;initialize module weights from pretrained model</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pretrained_net_fname : str</span>
+<span class="sd">            the pretrained model file path (e.g. `checkpoint.pth`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pretrained_dict</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pretrained_net_fname</span><span class="p">)</span>
+        <span class="n">net_state_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+        <span class="n">pretrained_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">pretrained_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">net_state_dict</span><span class="p">}</span>
+        <span class="n">net_state_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pretrained_dict</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">net_state_dict</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;params loaded from: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pretrained_net_fname</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BasicModule.load"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;load module weights from saved model </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str</span>
+<span class="sd">            the saved model file path (e.g. `checkpoint.pth`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="BasicModule.save"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;save module weights to file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fname : str, optional</span>
+<span class="sd">            Specify the saved model file path.</span>
+<span class="sd">            Default is &quot;None&quot;. Saved file will be formatted as &quot;model.time.pth&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;model&quot;</span> <span class="o">+</span> <span class="s1">&#39;%m</span><span class="si">%d</span><span class="s1">_%H:%M:%S.pth&#39;</span><span class="p">)</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fname</span></div>
+
+    <span class="c1"># TODO (jiaqili, 20220417): test the tensor flow in module forward</span>
+<div class="viewcode-block" id="BasicModule.test"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicModule.test">[docs]</a>    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">):</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">device</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">input_size</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Test: all the tensor flow shape reported&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Flatten"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.Flatten">[docs]</a><span class="k">class</span> <span class="nc">Flatten</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Flatten Module: flatten the tensor as (batch_size, -1).&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Flatten.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.Flatten.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">EXP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exp Module: calculate the exp of tensor as `x.exp()`&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="BasicConv1d"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicConv1d">[docs]</a><span class="k">class</span> <span class="nc">BasicConv1d</span><span class="p">(</span><span class="n">BasicModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Basic Convolutional Module (1d) in NvTK.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_planes : int</span>
+<span class="sd">        Number of input channels</span>
+<span class="sd">    out_planes : int</span>
+<span class="sd">        Number of output channels produced by the convolution</span>
+<span class="sd">    kernel_size : int, optional</span>
+<span class="sd">        Size of the convolving kernel</span>
+<span class="sd">    conv_args : dict, optional</span>
+<span class="sd">        Other convolutional args, Default is dict().</span>
+<span class="sd">        Will be pass to `torch.nn.Conv1d(**conv_args)`</span>
+<span class="sd">        (e.g. `conv_args={&#39;dilation&#39;:1}`)</span>
+<span class="sd">    bn : bool, optional</span>
+<span class="sd">        Whether to use BatchNorm1d, Default is True.</span>
+<span class="sd">    activation : nn.Module, optional</span>
+<span class="sd">        Activation Module, Default is nn.ReLU.</span>
+<span class="sd">    activation_args : dict, optional</span>
+<span class="sd">        Other activation args, Default is dict().</span>
+<span class="sd">        Will be pass to `activation(**activation_args)`</span>
+<span class="sd">        (e.g. `activation=nn.LeakyReLU, activation_args={&#39;p&#39;:0.2}`)</span>
+<span class="sd">    dropout : bool, optional</span>
+<span class="sd">        Whether to use Dropout, Default is True.</span>
+<span class="sd">    dropout_args : dict, optional</span>
+<span class="sd">        Dropout args, Default is {&#39;p&#39;:0.5}.</span>
+<span class="sd">        Will be pass to `nn.Dropout(**dropout_args)` if dropout</span>
+<span class="sd">        (e.g. `dropout=True, dropout_args={&#39;p&#39;:0.5}`)</span>
+<span class="sd">    pool : nn.Module, optional</span>
+<span class="sd">        Pool Module (1d), Default is nn.AvgPool1d.</span>
+<span class="sd">    pool_args : dict, optional</span>
+<span class="sd">        Other pool args, Default is {&#39;kernel_size&#39;: 3}.</span>
+<span class="sd">        Will be pass to `pool(**pool_args)`</span>
+<span class="sd">        (e.g. `pool=nn.AvgPool1d, pool_args={&#39;kernel_size&#39;: 3}`)</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_channels : int</span>
+
+<span class="sd">    out_channels : int</span>
+
+<span class="sd">    conv : nn.Conv1d</span>
+<span class="sd">        The convolutional neural network component of the model.</span>
+<span class="sd">    bn : nn.BatchNorm1d</span>
+<span class="sd">        The Batch Normalization </span>
+<span class="sd">    activation : nn.Module</span>
+<span class="sd">        The activation Module</span>
+<span class="sd">    dropout : nn.Dropout</span>
+<span class="sd">        The Dropout Module</span>
+<span class="sd">    pool : nn.Module</span>
+<span class="sd">        The pool Module</span>
+
+<span class="sd">    Tensor flows</span>
+<span class="sd">    ----------</span>
+<span class="sd">    -&gt; conv(x)</span>
+
+<span class="sd">    -&gt; bn(x) if bn</span>
+<span class="sd">    </span>
+<span class="sd">    -&gt; activation(x) if activation</span>
+<span class="sd">    </span>
+<span class="sd">    -&gt; dropout(x) if dropout</span>
+<span class="sd">    </span>
+<span class="sd">    -&gt; pool(x) if pool</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_planes</span><span class="p">,</span> <span class="n">out_planes</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">conv_args</span><span class="o">=</span><span class="p">{},</span> 
+                    <span class="n">bn</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                    <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">activation_args</span><span class="o">=</span><span class="p">{},</span> 
+                    <span class="n">dropout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dropout_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;p&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">},</span>
+                    <span class="n">pool</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">AvgPool1d</span><span class="p">,</span> <span class="n">pool_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;kernel_size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_planes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">out_planes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_planes</span><span class="p">,</span> <span class="n">out_planes</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span> <span class="o">**</span><span class="n">conv_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="n">out_planes</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">affine</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">bn</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="o">**</span><span class="n">activation_args</span><span class="p">)</span> <span class="k">if</span> <span class="n">activation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="o">**</span><span class="n">dropout_args</span><span class="p">)</span> <span class="k">if</span> <span class="n">dropout</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">pool</span><span class="p">(</span><span class="o">**</span><span class="n">pool_args</span><span class="p">)</span> <span class="k">if</span> <span class="n">pool</span> <span class="k">else</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="BasicConv1d.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicConv1d.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div></div>
+
+
+<div class="viewcode-block" id="BasicRNNModule"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicRNNModule">[docs]</a><span class="k">class</span> <span class="nc">BasicRNNModule</span><span class="p">(</span><span class="n">BasicModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Basic RNN(LSTM) Module in batch-first style</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">LSTM_input_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">LSTM_hidden_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">LSTM_hidden_layes</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rnn_hidden_state</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rnn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span>
+            <span class="n">input_size</span><span class="o">=</span><span class="n">LSTM_input_size</span><span class="p">,</span>
+            <span class="n">hidden_size</span><span class="o">=</span><span class="n">LSTM_hidden_size</span><span class="p">,</span>
+            <span class="n">num_layers</span><span class="o">=</span><span class="n">LSTM_hidden_layes</span><span class="p">,</span>
+            <span class="n">batch_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># batch, seq, feature</span>
+            <span class="n">bidirectional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+<div class="viewcode-block" id="BasicRNNModule.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicRNNModule.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rnn_hidden_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rnn</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span></div></div>
+
+
+<div class="viewcode-block" id="BasicLinearModule"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicLinearModule">[docs]</a><span class="k">class</span> <span class="nc">BasicLinearModule</span><span class="p">(</span><span class="n">BasicModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Basic Linear Module in NvTK.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_size : int</span>
+<span class="sd">        Number of input size</span>
+<span class="sd">    output_size : int</span>
+<span class="sd">        Number of output size produced by the Linear</span>
+<span class="sd">    bias : bool, optional</span>
+<span class="sd">        Bias of the Linear, Default is True.</span>
+<span class="sd">        It could be False when use BatchNorm.</span>
+<span class="sd">    bn : bool, optional</span>
+<span class="sd">        Whether to use BatchNorm1d, Default is True.</span>
+<span class="sd">    activation : nn.Module, optional</span>
+<span class="sd">        Activation Module, Default is nn.ReLU.</span>
+<span class="sd">    activation_args : dict, optional</span>
+<span class="sd">        Other activation args, Default is dict().</span>
+<span class="sd">        Will be pass to `activation(**activation_args)`</span>
+<span class="sd">        (e.g. `activation=nn.LeakyReLU, activation_args={&#39;p&#39;:0.2}`)</span>
+<span class="sd">    dropout : bool, optional</span>
+<span class="sd">        Whether to use Dropout, Default is True.</span>
+<span class="sd">    dropout_args : dict, optional</span>
+<span class="sd">        Dropout args, Default is {&#39;p&#39;:0.5}.</span>
+<span class="sd">        Will be pass to `nn.Dropout(**dropout_args)` if dropout</span>
+<span class="sd">        (e.g. `dropout=True, dropout_args={&#39;p&#39;:0.5}`)</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_size : int</span>
+
+<span class="sd">    output_size : int</span>
+
+<span class="sd">    linear : nn.Linear</span>
+<span class="sd">        The Linear neural network component</span>
+<span class="sd">    bn : nn.BatchNorm1d</span>
+<span class="sd">        The Batch Normalization </span>
+<span class="sd">    activation : nn.Module</span>
+<span class="sd">        The activation Module</span>
+<span class="sd">    dropout : nn.Dropout</span>
+<span class="sd">        The Dropout Module</span>
+
+<span class="sd">    Tensor flows</span>
+<span class="sd">    ----------</span>
+<span class="sd">    -&gt; linear(x)</span>
+
+<span class="sd">    -&gt; bn(x) if bn</span>
+<span class="sd">    </span>
+<span class="sd">    -&gt; activation(x) if activation</span>
+<span class="sd">    </span>
+<span class="sd">    -&gt; dropout(x) if dropout</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bn</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                    <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">activation_args</span><span class="o">=</span><span class="p">{},</span> 
+                    <span class="n">dropout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dropout_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;p&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">}):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">input_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="n">output_size</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">affine</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">bn</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="o">**</span><span class="n">activation_args</span><span class="p">)</span> <span class="k">if</span> <span class="n">activation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="o">**</span><span class="n">dropout_args</span><span class="p">)</span> <span class="k">if</span> <span class="n">dropout</span> <span class="k">else</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="BasicLinearModule.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicLinearModule.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div></div>
+
+
+<div class="viewcode-block" id="BasicPredictor"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicPredictor">[docs]</a><span class="k">class</span> <span class="nc">BasicPredictor</span><span class="p">(</span><span class="n">BasicModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;BasicPredictor Module in NvTK.</span>
+<span class="sd">    </span>
+<span class="sd">    BasicPredictor support task types of &#39;none&#39;, &#39;binary_classification&#39;, &#39;classification&#39;, &#39;regression&#39;;</span>
+<span class="sd">    1. &#39;none&#39; : nullify the whole BaiscPredictor with identity</span>
+<span class="sd">    2. &#39;binary_classification&#39; : activate with Sigmoid</span>
+<span class="sd">    3. &#39;classification&#39; : activate with Softmax(dim=1)</span>
+<span class="sd">    4. &#39;regression&#39; : Identity</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_size : int</span>
+<span class="sd">        Number of input size</span>
+<span class="sd">    output_size : int</span>
+<span class="sd">        Number of output size (task numbers)</span>
+<span class="sd">    tasktype : str, optional</span>
+<span class="sd">        Specify the task type, Default is &quot;binary_classification&quot;.</span>
+<span class="sd">        (e.g. `tasktype=&quot;regression&quot;`)</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    supported_tasks : currently supported task types</span>
+<span class="sd">    tasktype : task type of Predictor</span>
+<span class="sd">    input_size : int</span>
+<span class="sd">    Map : nn.Linear</span>
+<span class="sd">        The Linear Module Mapping input to output.</span>
+<span class="sd">    Pred: nn.Module</span>
+<span class="sd">        The Activation Module in specified task type.</span>
+
+<span class="sd">    Tensor flow</span>
+<span class="sd">    ----------</span>
+<span class="sd">    -&gt; Map(x)</span>
+
+<span class="sd">    -&gt; Pred(x)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">tasktype</span><span class="o">=</span><span class="s1">&#39;binary_classification&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supported_tasks</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="s1">&#39;regression&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">input_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasktype</span> <span class="o">=</span> <span class="n">tasktype</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">Map</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">switch_task</span><span class="p">(</span><span class="n">tasktype</span><span class="p">)</span> <span class="c1"># init self.Map</span>
+
+<div class="viewcode-block" id="BasicPredictor.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicPredictor.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Pred</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BasicPredictor.switch_task"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicPredictor.switch_task">[docs]</a>    <span class="k">def</span> <span class="nf">switch_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tasktype</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;switch to specified task type</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tasktype : str</span>
+<span class="sd">            Specify the task type (e.g. `tasktype=&quot;regression&quot;`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;tasktype: </span><span class="si">%s</span><span class="s1"> not supported, check the document&#39;</span> <span class="o">%</span> <span class="n">tasktype</span>
+        <span class="k">assert</span> <span class="n">tasktype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_tasks</span><span class="p">,</span> <span class="n">msg</span>
+
+        <span class="k">if</span> <span class="n">tasktype</span> <span class="o">==</span> <span class="s1">&#39;none&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Map</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Pred</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">tasktype</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Pred</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tasktype</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Pred</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">tasktype</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Pred</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasktype</span> <span class="o">=</span> <span class="n">tasktype</span></div>
+    
+    <span class="c1"># TODO</span>
+    <span class="c1"># def finetune(self, output_size, tasktype=&#39;binary_classification&#39;):</span>
+    <span class="c1">#     self.Map = nn.Linear(input_size, output_size, bias=True)</span>
+    <span class="c1">#     self.Pred = nn.Sequential()</span>
+
+    <span class="c1">#     self.tasktype = tasktype</span>
+    <span class="c1">#     self.switch_task(tasktype)</span>
+
+<div class="viewcode-block" id="BasicPredictor.current_task"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicPredictor.current_task">[docs]</a>    <span class="k">def</span> <span class="nf">current_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return current task type&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasktype</span></div>
+
+<div class="viewcode-block" id="BasicPredictor.remove"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicPredictor.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Predictor.remove: replace predictor with null Sequential,</span>
+<span class="sd">        same as switch_task(&#39;none&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">switch_task</span><span class="p">(</span><span class="s1">&#39;none&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="BasicLoss"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicLoss">[docs]</a><span class="k">class</span> <span class="nc">BasicLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;BasicLoss Module in NvTK.</span>
+<span class="sd">    </span>
+<span class="sd">    BasicLoss support task types of &#39;binary_classification&#39;, &#39;classification&#39;, &#39;regression&#39;;</span>
+<span class="sd">    1. &#39;binary_classification&#39; : BCELoss function</span>
+<span class="sd">    2. &#39;classification&#39; : CrossEntropyLoss function</span>
+<span class="sd">    3. &#39;regression&#39; : MSELoss function</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tasktype : str, optional</span>
+<span class="sd">        Specify the task type, Default is &quot;binary_classification&quot;.</span>
+<span class="sd">        (e.g. `tasktype=&quot;regression&quot;`)</span>
+<span class="sd">    reduction : str, optional</span>
+<span class="sd">        Specifies the reduction to apply to the output: `&#39;none&#39;` | `&#39;mean&#39;` | `&#39;sum&#39;`.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    supported_tasks : currently supported task types</span>
+<span class="sd">    tasktype : task type of Predictor</span>
+<span class="sd">    loss : loss function</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tasktype</span><span class="o">=</span><span class="s1">&#39;binary_classification&#39;</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supported_tasks</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;binary_classification&#39;</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="s1">&#39;regression&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasktype</span> <span class="o">=</span> <span class="n">tasktype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reduction</span> <span class="o">=</span> <span class="n">reduction</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">switch_task</span><span class="p">(</span><span class="n">tasktype</span><span class="p">)</span> <span class="c1"># init self.loss</span>
+
+<div class="viewcode-block" id="BasicLoss.forward"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BasicLoss.switch_task"><a class="viewcode-back" href="../../../NvTK.Modules.html#NvTK.Modules.BasicModule.BasicLoss.switch_task">[docs]</a>    <span class="k">def</span> <span class="nf">switch_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tasktype</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;switch to specified task type</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tasktype : str</span>
+<span class="sd">            Specify the task type (e.g. `tasktype=&quot;regression&quot;`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;tasktype: </span><span class="si">%s</span><span class="s1"> not supported, check the document&#39;</span> <span class="o">%</span> <span class="n">tasktype</span>
+        <span class="k">assert</span> <span class="n">tasktype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_tasks</span><span class="p">,</span> <span class="n">msg</span>
+
+        <span class="k">if</span> <span class="n">tasktype</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reduction</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tasktype</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BCELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reduction</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tasktype</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reduction</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasktype</span> <span class="o">=</span> <span class="n">tasktype</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

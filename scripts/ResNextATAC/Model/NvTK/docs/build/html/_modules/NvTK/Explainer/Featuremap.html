@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK.Explainer.Featuremap &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../../NvTK.html">NvTK</a> &raquo;</li>
+      <li>NvTK.Explainer.Featuremap</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NvTK.Explainer.Featuremap</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Feature map based model interpretation methods in NvTK.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.Motif</span> <span class="kn">import</span> <span class="n">normalize_pwm</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;get_activate_W&quot;</span><span class="p">,</span> <span class="s2">&quot;get_fmap&quot;</span><span class="p">,</span> <span class="s2">&quot;get_activate_W_from_fmap&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_activate_sequence_from_fmap&quot;</span><span class="p">,</span> <span class="s2">&quot;save_activate_seqlets&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">_get_W_from_conv</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">motif_width</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">)):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Experimental function!</span>
+<span class="sd">    get motif directly from convolution parameters, </span>
+<span class="sd">    PWM were extracted from `model.Embedding.conv`</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">x_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">motif_width</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">x_tensor</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">x_tensor</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,:]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">x_tensor</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,:]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">x_tensor</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,:]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">fmap</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Embedding</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x_tensor</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Check if you model have model.Embedding.conv attr?&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+    <span class="n">W</span> <span class="o">=</span> <span class="n">fmap</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">normalize_pwm</span><span class="p">(</span><span class="n">pwm</span><span class="p">)</span> <span class="k">for</span> <span class="n">pwm</span> <span class="ow">in</span> <span class="n">W</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">W</span>
+
+
+<span class="c1"># hook</span>
+<span class="k">class</span> <span class="nc">ActivateFeaturesHook</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hook_fn</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">hook_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="c1">#.mean(-1)</span>
+    <span class="k">def</span> <span class="nf">get_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span>
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="get_fmap"><a class="viewcode-back" href="../../../NvTK.Explainer.html#NvTK.Explainer.Featuremap.get_fmap">[docs]</a><span class="k">def</span> <span class="nf">get_fmap</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">hook_module</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;Get feature map of input data at model.hook_module</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : </span>
+<span class="sd">        model</span>
+<span class="sd">    hook_module : int</span>
+<span class="sd">        hook_module</span>
+<span class="sd">    data_loader : torch.Data.Dataloader</span>
+<span class="sd">        input data</span>
+<span class="sd">    device : torch.device, optional</span>
+<span class="sd">        torch.device, Default is `torch.device(&quot;cuda&quot;)`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fmap : np.ndarr</span>
+<span class="sd">        feature map of input data at model.hook_module</span>
+<span class="sd">    X : np.ndarr</span>
+<span class="sd">        input data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fmap</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">activations</span> <span class="o">=</span> <span class="n">ActivateFeaturesHook</span><span class="p">(</span><span class="n">hook_module</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x_tensor</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
+            <span class="n">x_tensor</span> <span class="o">=</span> <span class="n">x_tensor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_tensor</span><span class="p">)</span>
+            <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_tensor</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+            <span class="n">fmap</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">activations</span><span class="o">.</span><span class="n">get_features</span><span class="p">())</span>
+        <span class="n">fmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">fmap</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">activations</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">fmap</span><span class="p">,</span> <span class="n">X</span></div>
+
+
+<div class="viewcode-block" id="get_activate_W_from_fmap"><a class="viewcode-back" href="../../../NvTK.Explainer.html#NvTK.Explainer.Featuremap.get_activate_W_from_fmap">[docs]</a><span class="k">def</span> <span class="nf">get_activate_W_from_fmap</span><span class="p">(</span><span class="n">fmap</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">motif_width</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get activated motif pwm from feature map</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fmap : np.ndarr</span>
+<span class="sd">        feature map of input data at model.hook_module</span>
+<span class="sd">    X : np.ndarr</span>
+<span class="sd">        input data</span>
+<span class="sd">    pool : int</span>
+<span class="sd">        input data</span>
+<span class="sd">    threshold : floor</span>
+<span class="sd">        threshold determine the activated sites in feature map</span>
+<span class="sd">    motif_width : int</span>
+<span class="sd">        width of motif, the width region sequence of activated sites </span>
+<span class="sd">        will be normalized as counts</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    W : np.ndarr</span>
+<span class="sd">        array of activated motif pwm, </span>
+<span class="sd">        shape of W (n_filters, 4, motif_width)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">motif_nb</span> <span class="o">=</span> <span class="n">fmap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">X_dim</span><span class="p">,</span> <span class="n">seq_len</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">W</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">filter_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">motif_nb</span><span class="p">):</span>
+        <span class="c1"># find regions above threshold</span>
+        <span class="n">data_index</span><span class="p">,</span> <span class="n">pos_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fmap</span><span class="p">[:,</span><span class="n">filter_index</span><span class="p">,:]</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">fmap</span><span class="p">[:,</span><span class="n">filter_index</span><span class="p">,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">*</span><span class="n">threshold</span><span class="p">)</span>
+
+        <span class="n">seq_align</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">count_matrix</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos_index</span><span class="p">)):</span>
+            <span class="c1"># pad 1-nt</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">pos_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># - motif_width // 2 </span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">motif_width</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="c1"># handle boundary conditions</span>
+            <span class="k">if</span> <span class="n">end</span> <span class="o">&gt;</span> <span class="n">seq_len</span><span class="p">:</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">seq_len</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">motif_width</span> <span class="o">-</span> <span class="mi">2</span> 
+            <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span> 
+                <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">motif_width</span> <span class="o">+</span> <span class="mi">2</span> 
+
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">data_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">:,</span> <span class="n">start</span><span class="o">*</span><span class="n">pool</span><span class="p">:</span><span class="n">end</span><span class="o">*</span><span class="n">pool</span><span class="p">]</span>
+            <span class="n">seq_align</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+            <span class="n">count_matrix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="n">seq_align</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">seq_align</span><span class="p">)</span>
+        <span class="n">count_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">count_matrix</span><span class="p">)</span>
+
+        <span class="c1"># normalize counts</span>
+        <span class="n">seq_align</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">seq_align</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">count_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">X_dim</span><span class="p">,</span> <span class="p">(</span><span class="n">motif_width</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">pool</span><span class="p">))</span>
+        <span class="n">seq_align</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">seq_align</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">W</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq_align</span><span class="p">)</span>
+
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">W</span></div>
+
+
+<div class="viewcode-block" id="get_activate_W"><a class="viewcode-back" href="../../../NvTK.Explainer.html#NvTK.Explainer.Featuremap.get_activate_W">[docs]</a><span class="k">def</span> <span class="nf">get_activate_W</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">hook_module</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">motif_width</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get activated motif pwm of input data at model.hook_module</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : </span>
+<span class="sd">        model</span>
+<span class="sd">    hook_module : int</span>
+<span class="sd">        hook_module</span>
+<span class="sd">    data_loader : torch.Data.Dataloader</span>
+<span class="sd">        input data</span>
+<span class="sd">    device : torch.device, optional</span>
+<span class="sd">        torch.device, Default is `torch.device(&quot;cuda&quot;)`.</span>
+<span class="sd">    pool : int</span>
+<span class="sd">        input data</span>
+<span class="sd">    threshold : floor</span>
+<span class="sd">        threshold determine the activated sites in feature map</span>
+<span class="sd">    motif_width : int</span>
+<span class="sd">        width of motif, the width region sequence of activated sites </span>
+<span class="sd">        will be normalized as counts</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    W : np.ndarr</span>
+<span class="sd">        array of activated motif pwm, </span>
+<span class="sd">        shape of W (n_filters, 4, motif_width)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fmap</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">get_fmap</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">hook_module</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">get_activate_W_from_fmap</span><span class="p">(</span><span class="n">fmap</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">pool</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">motif_width</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">W</span></div>
+
+
+<span class="k">def</span> <span class="nf">onehot2seq</span><span class="p">(</span><span class="n">gene_seq</span><span class="p">,</span> <span class="n">gene_name</span><span class="p">,</span> <span class="n">out_fname</span><span class="p">):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s1">&#39;T&#39;</span><span class="p">}</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fas</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">gene_name</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">d</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">T</span><span class="o">==</span><span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])),</span> <span class="n">gene_seq</span><span class="p">)):</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&gt;&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">fas</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_activate_sequence_from_fmap"><a class="viewcode-back" href="../../../NvTK.Explainer.html#NvTK.Explainer.Featuremap.get_activate_sequence_from_fmap">[docs]</a><span class="k">def</span> <span class="nf">get_activate_sequence_from_fmap</span><span class="p">(</span><span class="n">fmap</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">motif_width</span><span class="o">=</span><span class="mi">40</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get activated sequence from feature map.</span>
+<span class="sd">    Seqlets could be further analyzed by bioinformatic softwares, </span>
+<span class="sd">    such as Homer2.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fmap : np.ndarr</span>
+<span class="sd">        feature map of input data at model.hook_module</span>
+<span class="sd">    X : np.ndarr</span>
+<span class="sd">        input data</span>
+<span class="sd">    pool : int</span>
+<span class="sd">        input data</span>
+<span class="sd">    threshold : floor</span>
+<span class="sd">        threshold determine the activated sites in feature map</span>
+<span class="sd">    motif_width : int</span>
+<span class="sd">        width of motif, the width region sequence of activated sites </span>
+<span class="sd">        will be normalized as counts</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    W : list</span>
+<span class="sd">        list of activated motif seqlets, </span>
+<span class="sd">        shape of W (n_filters, 4, motif_width)</span>
+<span class="sd">    M : list</span>
+<span class="sd">        Seqlet Names, defined as &quot;Motif_Act&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">motif_nb</span> <span class="o">=</span> <span class="n">fmap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">seq_len</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">W</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">filter_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">motif_nb</span><span class="p">):</span>
+        <span class="c1"># find regions above threshold</span>
+        <span class="n">data_index</span><span class="p">,</span> <span class="n">pos_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fmap</span><span class="p">[:,</span><span class="n">filter_index</span><span class="p">,:]</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">fmap</span><span class="p">[:,</span><span class="n">filter_index</span><span class="p">,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">*</span><span class="n">threshold</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos_index</span><span class="p">)):</span>
+            <span class="c1"># handle boundary conditions</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">pos_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">pos_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">motif_width</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">end</span> <span class="o">&gt;</span> <span class="n">seq_len</span><span class="p">:</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">seq_len</span>
+                <span class="n">start</span><span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">motif_width</span> <span class="o">-</span> <span class="mi">2</span> 
+            <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span> 
+                <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">motif_width</span> <span class="o">+</span> <span class="mi">2</span>
+
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">data_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">:,</span> <span class="n">start</span><span class="o">*</span><span class="n">pool</span><span class="p">:</span><span class="n">end</span><span class="o">*</span><span class="n">pool</span><span class="p">]</span>
+            <span class="n">W</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+            <span class="n">M</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="s2">&quot;Motif&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">filter_index</span><span class="p">),</span> <span class="s2">&quot;Act&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))))</span>
+
+    <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">M</span></div>
+
+
+<div class="viewcode-block" id="save_activate_seqlets"><a class="viewcode-back" href="../../../NvTK.Explainer.html#NvTK.Explainer.Featuremap.save_activate_seqlets">[docs]</a><span class="k">def</span> <span class="nf">save_activate_seqlets</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">hook_module</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">out_fname</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">motif_width</span><span class="o">=</span><span class="mi">40</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save activated Seqlets pwm from feature map</span>
+<span class="sd">    Seqlets could be further analyzed by bioinformatic softwares, </span>
+<span class="sd">    such as Homer2.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : </span>
+<span class="sd">        model</span>
+<span class="sd">    hook_module : int</span>
+<span class="sd">        hook_module</span>
+<span class="sd">    data_loader : torch.Data.Dataloader</span>
+<span class="sd">        input data</span>
+<span class="sd">    out_fname : str</span>
+<span class="sd">        output file name</span>
+<span class="sd">    device : torch.device, optional</span>
+<span class="sd">        torch.device, Default is `torch.device(&quot;cuda&quot;)`.</span>
+<span class="sd">    pool : int</span>
+<span class="sd">        input data</span>
+<span class="sd">    threshold : floor</span>
+<span class="sd">        threshold determine the activated sites in feature map</span>
+<span class="sd">    motif_width : int</span>
+<span class="sd">        width of motif, the width region sequence of activated sites </span>
+<span class="sd">        will be normalized as counts</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fmap</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">get_fmap</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">hook_module</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">gene_seq</span><span class="p">,</span> <span class="n">gene_name</span> <span class="o">=</span> <span class="n">get_activate_sequence_from_fmap</span><span class="p">(</span><span class="n">fmap</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span> <span class="n">motif_width</span><span class="o">=</span><span class="n">motif_width</span><span class="p">)</span>
+    <span class="n">onehot2seq</span><span class="p">(</span><span class="n">gene_seq</span><span class="p">,</span> <span class="n">gene_name</span><span class="p">,</span> <span class="n">out_fname</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

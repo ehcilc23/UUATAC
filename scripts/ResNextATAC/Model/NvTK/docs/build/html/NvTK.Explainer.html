@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NvTK.Explainer package &mdash; NvTK 0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> NvTK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">NvTK.Explainer package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-NvTK.Explainer.Featuremap">NvTK.Explainer.Featuremap module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Explainer.Gradiant">NvTK.Explainer.Gradiant module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Explainer.Influence">NvTK.Explainer.Influence module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Explainer.Motif">NvTK.Explainer.Motif module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Explainer.MotifVisualize">NvTK.Explainer.MotifVisualize module</a></li>
+<li><a class="reference internal" href="#nvtk-explainer-regulon-module">NvTK.Explainer.Regulon module</a></li>
+<li><a class="reference internal" href="#module-NvTK.Explainer">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NvTK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>NvTK.Explainer package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/NvTK.Explainer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="nvtk-explainer-package">
+<h1>NvTK.Explainer package<a class="headerlink" href="#nvtk-explainer-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-NvTK.Explainer.Featuremap">
+<span id="nvtk-explainer-featuremap-module"></span><h2>NvTK.Explainer.Featuremap module<a class="headerlink" href="#module-NvTK.Explainer.Featuremap" title="Permalink to this headline">¶</a></h2>
+<p>Feature map based model interpretation methods in NvTK.</p>
+<dl class="function">
+<dt id="NvTK.Explainer.Featuremap.get_activate_W">
+<code class="descclassname">NvTK.Explainer.Featuremap.</code><code class="descname">get_activate_W</code><span class="sig-paren">(</span><em>model</em>, <em>hook_module</em>, <em>data</em>, <em>pool=1</em>, <em>threshold=0.99</em>, <em>motif_width=20</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Featuremap.html#get_activate_W"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Featuremap.get_activate_W" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get activated motif pwm of input data at model.hook_module</p>
+<dl class="docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier"></span></dt>
+<dd>model</dd>
+<dt>hook_module <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>hook_module</dd>
+<dt>data_loader <span class="classifier-delimiter">:</span> <span class="classifier">torch.Data.Dataloader</span></dt>
+<dd>input data</dd>
+<dt>device <span class="classifier-delimiter">:</span> <span class="classifier">torch.device, optional</span></dt>
+<dd>torch.device, Default is <cite>torch.device(“cuda”)</cite>.</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>input data</dd>
+<dt>threshold <span class="classifier-delimiter">:</span> <span class="classifier">floor</span></dt>
+<dd>threshold determine the activated sites in feature map</dd>
+<dt>motif_width <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>width of motif, the width region sequence of activated sites 
+will be normalized as counts</dd>
+</dl>
+<dl class="docutils">
+<dt>W <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarr</span></dt>
+<dd>array of activated motif pwm, 
+shape of W (n_filters, 4, motif_width)</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Featuremap.get_fmap">
+<code class="descclassname">NvTK.Explainer.Featuremap.</code><code class="descname">get_fmap</code><span class="sig-paren">(</span><em>model</em>, <em>hook_module</em>, <em>data_loader</em>, <em>device=device(type='cuda')</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Featuremap.html#get_fmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Featuremap.get_fmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get feature map of input data at model.hook_module</p>
+<dl class="docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier"></span></dt>
+<dd>model</dd>
+<dt>hook_module <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>hook_module</dd>
+<dt>data_loader <span class="classifier-delimiter">:</span> <span class="classifier">torch.Data.Dataloader</span></dt>
+<dd>input data</dd>
+<dt>device <span class="classifier-delimiter">:</span> <span class="classifier">torch.device, optional</span></dt>
+<dd>torch.device, Default is <cite>torch.device(“cuda”)</cite>.</dd>
+</dl>
+<dl class="docutils">
+<dt>fmap <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarr</span></dt>
+<dd>feature map of input data at model.hook_module</dd>
+<dt>X <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarr</span></dt>
+<dd>input data</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Featuremap.get_activate_W_from_fmap">
+<code class="descclassname">NvTK.Explainer.Featuremap.</code><code class="descname">get_activate_W_from_fmap</code><span class="sig-paren">(</span><em>fmap</em>, <em>X</em>, <em>pool=1</em>, <em>threshold=0.99</em>, <em>motif_width=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Featuremap.html#get_activate_W_from_fmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Featuremap.get_activate_W_from_fmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get activated motif pwm from feature map</p>
+<dl class="docutils">
+<dt>fmap <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarr</span></dt>
+<dd>feature map of input data at model.hook_module</dd>
+<dt>X <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarr</span></dt>
+<dd>input data</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>input data</dd>
+<dt>threshold <span class="classifier-delimiter">:</span> <span class="classifier">floor</span></dt>
+<dd>threshold determine the activated sites in feature map</dd>
+<dt>motif_width <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>width of motif, the width region sequence of activated sites 
+will be normalized as counts</dd>
+</dl>
+<dl class="docutils">
+<dt>W <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarr</span></dt>
+<dd>array of activated motif pwm, 
+shape of W (n_filters, 4, motif_width)</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Featuremap.get_activate_sequence_from_fmap">
+<code class="descclassname">NvTK.Explainer.Featuremap.</code><code class="descname">get_activate_sequence_from_fmap</code><span class="sig-paren">(</span><em>fmap</em>, <em>X</em>, <em>pool=1</em>, <em>threshold=0.99</em>, <em>motif_width=40</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Featuremap.html#get_activate_sequence_from_fmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Featuremap.get_activate_sequence_from_fmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get activated sequence from feature map.
+Seqlets could be further analyzed by bioinformatic softwares, 
+such as Homer2.</p>
+<dl class="docutils">
+<dt>fmap <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarr</span></dt>
+<dd>feature map of input data at model.hook_module</dd>
+<dt>X <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarr</span></dt>
+<dd>input data</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>input data</dd>
+<dt>threshold <span class="classifier-delimiter">:</span> <span class="classifier">floor</span></dt>
+<dd>threshold determine the activated sites in feature map</dd>
+<dt>motif_width <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>width of motif, the width region sequence of activated sites 
+will be normalized as counts</dd>
+</dl>
+<dl class="docutils">
+<dt>W <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>list of activated motif seqlets, 
+shape of W (n_filters, 4, motif_width)</dd>
+<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>Seqlet Names, defined as “Motif_Act”</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Featuremap.save_activate_seqlets">
+<code class="descclassname">NvTK.Explainer.Featuremap.</code><code class="descname">save_activate_seqlets</code><span class="sig-paren">(</span><em>model</em>, <em>hook_module</em>, <em>data</em>, <em>out_fname</em>, <em>pool=1</em>, <em>threshold=0.99</em>, <em>motif_width=40</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Featuremap.html#save_activate_seqlets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Featuremap.save_activate_seqlets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save activated Seqlets pwm from feature map
+Seqlets could be further analyzed by bioinformatic softwares, 
+such as Homer2.</p>
+<dl class="docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier"></span></dt>
+<dd>model</dd>
+<dt>hook_module <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>hook_module</dd>
+<dt>data_loader <span class="classifier-delimiter">:</span> <span class="classifier">torch.Data.Dataloader</span></dt>
+<dd>input data</dd>
+<dt>out_fname <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>output file name</dd>
+<dt>device <span class="classifier-delimiter">:</span> <span class="classifier">torch.device, optional</span></dt>
+<dd>torch.device, Default is <cite>torch.device(“cuda”)</cite>.</dd>
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>input data</dd>
+<dt>threshold <span class="classifier-delimiter">:</span> <span class="classifier">floor</span></dt>
+<dd>threshold determine the activated sites in feature map</dd>
+<dt>motif_width <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>width of motif, the width region sequence of activated sites 
+will be normalized as counts</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Explainer.Gradiant">
+<span id="nvtk-explainer-gradiant-module"></span><h2>NvTK.Explainer.Gradiant module<a class="headerlink" href="#module-NvTK.Explainer.Gradiant" title="Permalink to this headline">¶</a></h2>
+<p>Gradiant based model interpretation methods in NvTK.</p>
+<dl class="function">
+<dt id="NvTK.Explainer.Gradiant.contribution_input_grad">
+<code class="descclassname">NvTK.Explainer.Gradiant.</code><code class="descname">contribution_input_grad</code><span class="sig-paren">(</span><em>model</em>, <em>input_tensor</em>, <em>multiply_by_inputs=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Gradiant.html#contribution_input_grad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Gradiant.contribution_input_grad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Gradiant.deep_explain_layer_conductance">
+<code class="descclassname">NvTK.Explainer.Gradiant.</code><code class="descname">deep_explain_layer_conductance</code><span class="sig-paren">(</span><em>model</em>, <em>model_layer</em>, <em>input_tensor</em>, <em>n_class=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Gradiant.html#deep_explain_layer_conductance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Gradiant.deep_explain_layer_conductance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Gradiant.deep_explain_saliancy">
+<code class="descclassname">NvTK.Explainer.Gradiant.</code><code class="descname">deep_explain_saliancy</code><span class="sig-paren">(</span><em>model</em>, <em>input_tensor</em>, <em>n_class=1</em>, <em>use_abs=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Gradiant.html#deep_explain_saliancy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Gradiant.deep_explain_saliancy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Gradiant.input_saliancy_location">
+<code class="descclassname">NvTK.Explainer.Gradiant.</code><code class="descname">input_saliancy_location</code><span class="sig-paren">(</span><em>model</em>, <em>input_tensor</em>, <em>n_class=3</em>, <em>use_abs=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Gradiant.html#input_saliancy_location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Gradiant.input_saliancy_location" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Gradiant.label_neuron_importance">
+<code class="descclassname">NvTK.Explainer.Gradiant.</code><code class="descname">label_neuron_importance</code><span class="sig-paren">(</span><em>model</em>, <em>model_layer</em>, <em>input_tensor</em>, <em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Gradiant.html#label_neuron_importance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Gradiant.label_neuron_importance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Gradiant.plot_label_neuron_importance">
+<code class="descclassname">NvTK.Explainer.Gradiant.</code><code class="descname">plot_label_neuron_importance</code><span class="sig-paren">(</span><em>model</em>, <em>model_layer</em>, <em>input_tensor</em>, <em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Gradiant.html#plot_label_neuron_importance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Gradiant.plot_label_neuron_importance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Gradiant.plot_saliancy_location">
+<code class="descclassname">NvTK.Explainer.Gradiant.</code><code class="descname">plot_saliancy_location</code><span class="sig-paren">(</span><em>model</em>, <em>input_tensor</em>, <em>n_class=3</em>, <em>use_abs=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Gradiant.html#plot_saliancy_location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Gradiant.plot_saliancy_location" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Explainer.Influence">
+<span id="nvtk-explainer-influence-module"></span><h2>NvTK.Explainer.Influence module<a class="headerlink" href="#module-NvTK.Explainer.Influence" title="Permalink to this headline">¶</a></h2>
+<p>Influence based model interpretation methods in NvTK.</p>
+<p>Influence quantified the Feed Forward Modification/Nullification of input,
+which measured the influence on each single task.</p>
+<dl class="function">
+<dt id="NvTK.Explainer.Influence.foldchange">
+<code class="descclassname">NvTK.Explainer.Influence.</code><code class="descname">foldchange</code><span class="sig-paren">(</span><em>origin</em>, <em>modified</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Influence.html#foldchange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Influence.foldchange" title="Permalink to this definition">¶</a></dt>
+<dd><p>caculate the fold change between modified and origin outputs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Influence.correlation_ratio">
+<code class="descclassname">NvTK.Explainer.Influence.</code><code class="descname">correlation_ratio</code><span class="sig-paren">(</span><em>categories</em>, <em>measurements</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Influence.html#correlation_ratio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Influence.correlation_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correlation Ration (ETA) between categories and measurements.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Influence.channel_target_influence">
+<code class="descclassname">NvTK.Explainer.Influence.</code><code class="descname">channel_target_influence</code><span class="sig-paren">(</span><em>model</em>, <em>hook_module</em>, <em>data_loader</em>, <em>device=device(type='cuda')</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Influence.html#channel_target_influence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Influence.channel_target_influence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Influence.layer_channel_combination_influence">
+<code class="descclassname">NvTK.Explainer.Influence.</code><code class="descname">layer_channel_combination_influence</code><span class="sig-paren">(</span><em>model</em>, <em>hook_module</em>, <em>data_loader</em>, <em>device=device(type='cuda')</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Influence.html#layer_channel_combination_influence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Influence.layer_channel_combination_influence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Influence.input_channel_target_influence">
+<code class="descclassname">NvTK.Explainer.Influence.</code><code class="descname">input_channel_target_influence</code><span class="sig-paren">(</span><em>model</em>, <em>hook_module</em>, <em>data_loader</em>, <em>device=device(type='cuda')</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Influence.html#input_channel_target_influence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Influence.input_channel_target_influence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Influence.input_layer_channel_combination_influence">
+<code class="descclassname">NvTK.Explainer.Influence.</code><code class="descname">input_layer_channel_combination_influence</code><span class="sig-paren">(</span><em>model</em>, <em>hook_module</em>, <em>data_loader</em>, <em>device=device(type='cuda')</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Influence.html#input_layer_channel_combination_influence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Influence.input_layer_channel_combination_influence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Explainer.Motif">
+<span id="nvtk-explainer-motif-module"></span><h2>NvTK.Explainer.Motif module<a class="headerlink" href="#module-NvTK.Explainer.Motif" title="Permalink to this headline">¶</a></h2>
+<p>Motif analysis in NvTK.</p>
+<p>Currently, this module only support DNA MOTIF analysis.</p>
+<dl class="function">
+<dt id="NvTK.Explainer.Motif.calc_frequency_W">
+<code class="descclassname">NvTK.Explainer.Motif.</code><code class="descname">calc_frequency_W</code><span class="sig-paren">(</span><em>W</em>, <em>background=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Motif.html#calc_frequency_W"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Motif.calc_frequency_W" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate motif Frequency in pwms</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Motif.calc_motif_IC">
+<code class="descclassname">NvTK.Explainer.Motif.</code><code class="descname">calc_motif_IC</code><span class="sig-paren">(</span><em>motif</em>, <em>background=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Motif.html#calc_motif_IC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Motif.calc_motif_IC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Motif IC Bernouli</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Motif.calc_motif_entropy">
+<code class="descclassname">NvTK.Explainer.Motif.</code><code class="descname">calc_motif_entropy</code><span class="sig-paren">(</span><em>motif</em>, <em>background=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Motif.html#calc_motif_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Motif.calc_motif_entropy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Motif Entropy</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Motif.calc_motif_frequency">
+<code class="descclassname">NvTK.Explainer.Motif.</code><code class="descname">calc_motif_frequency</code><span class="sig-paren">(</span><em>motif_IC</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Motif.html#calc_motif_frequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Motif.calc_motif_frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Motif Frequency</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Motif.info_content">
+<code class="descclassname">NvTK.Explainer.Motif.</code><code class="descname">info_content</code><span class="sig-paren">(</span><em>pwm</em>, <em>bg=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Motif.html#info_content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Motif.info_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Motif IC Bernouli</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Motif.meme_generate">
+<code class="descclassname">NvTK.Explainer.Motif.</code><code class="descname">meme_generate</code><span class="sig-paren">(</span><em>W</em>, <em>output_file='meme.txt'</em>, <em>prefix='Motif_'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Motif.html#meme_generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Motif.meme_generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate meme file for pwms</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Motif.normalize_pwm">
+<code class="descclassname">NvTK.Explainer.Motif.</code><code class="descname">normalize_pwm</code><span class="sig-paren">(</span><em>pwm</em>, <em>factor=None</em>, <em>max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Motif.html#normalize_pwm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Motif.normalize_pwm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize pwm</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.Motif.trim_ic">
+<code class="descclassname">NvTK.Explainer.Motif.</code><code class="descname">trim_ic</code><span class="sig-paren">(</span><em>motif</em>, <em>cutoff=0.4</em>, <em>background=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/Motif.html#trim_ic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.Motif.trim_ic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trim motif based on IC(Bernouli)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-NvTK.Explainer.MotifVisualize">
+<span id="nvtk-explainer-motifvisualize-module"></span><h2>NvTK.Explainer.MotifVisualize module<a class="headerlink" href="#module-NvTK.Explainer.MotifVisualize" title="Permalink to this headline">¶</a></h2>
+<p>Motif Visualization in NvTK.</p>
+<p>Currently, this module only support DNA MOTIF Visualization.</p>
+<p>Protein Sequence Motif Visualization was under development.</p>
+<dl class="function">
+<dt id="NvTK.Explainer.MotifVisualize.filter_heatmap">
+<code class="descclassname">NvTK.Explainer.MotifVisualize.</code><code class="descname">filter_heatmap</code><span class="sig-paren">(</span><em>pwm</em>, <em>output_fname=None</em>, <em>save=False</em>, <em>fig_size=(10</em>, <em>7)</em>, <em>norm=True</em>, <em>cmap='hot_r'</em>, <em>cbar_norm=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/MotifVisualize.html#filter_heatmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.MotifVisualize.filter_heatmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>visualize pwm represented Filter in heatmap.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.MotifVisualize.plot_filter_heatmap">
+<code class="descclassname">NvTK.Explainer.MotifVisualize.</code><code class="descname">plot_filter_heatmap</code><span class="sig-paren">(</span><em>W</em>, <em>factor=5</em>, <em>fig_size=(10</em>, <em>7)</em>, <em>save=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/MotifVisualize.html#plot_filter_heatmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.MotifVisualize.plot_filter_heatmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>visualize pwm represented Filter in heatmap.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.MotifVisualize.plot_filter_logos">
+<code class="descclassname">NvTK.Explainer.MotifVisualize.</code><code class="descname">plot_filter_logos</code><span class="sig-paren">(</span><em>W</em>, <em>figsize=(10</em>, <em>7)</em>, <em>height=25</em>, <em>nt_width=10</em>, <em>norm=0</em>, <em>alphabet='dna'</em>, <em>norm_factor=3</em>, <em>num_rows=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/MotifVisualize.html#plot_filter_logos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.MotifVisualize.plot_filter_logos" title="Permalink to this definition">¶</a></dt>
+<dd><p>visualize pwm represented filter Logo.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.MotifVisualize.seq_logo">
+<code class="descclassname">NvTK.Explainer.MotifVisualize.</code><code class="descname">seq_logo</code><span class="sig-paren">(</span><em>pwm</em>, <em>height=30</em>, <em>nt_width=10</em>, <em>norm=0</em>, <em>alphabet='dna'</em>, <em>colormap='standard'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/MotifVisualize.html#seq_logo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.MotifVisualize.seq_logo" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate sequence logo from pwm.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NvTK.Explainer.MotifVisualize.plot_seq_logo">
+<code class="descclassname">NvTK.Explainer.MotifVisualize.</code><code class="descname">plot_seq_logo</code><span class="sig-paren">(</span><em>logo</em>, <em>nt_width=None</em>, <em>step_multiple=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NvTK/Explainer/MotifVisualize.html#plot_seq_logo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NvTK.Explainer.MotifVisualize.plot_seq_logo" title="Permalink to this definition">¶</a></dt>
+<dd><p>visualize sequence logo.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="nvtk-explainer-regulon-module">
+<h2>NvTK.Explainer.Regulon module<a class="headerlink" href="#nvtk-explainer-regulon-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-NvTK.Explainer">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-NvTK.Explainer" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jiaqili@zju.edu.cn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
