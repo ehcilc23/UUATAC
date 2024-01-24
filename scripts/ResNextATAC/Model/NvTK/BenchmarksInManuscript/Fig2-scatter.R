@@ -3,7 +3,7 @@ setwd("~/Nvwa_Benchmark/")
 library(ggthemes)
 library(ggplot2)
 library(ggpubr)
-library(ggpointdensity) # 绘制密度散点图
+library(ggpointdensity)
 library( gridExtra)
 
 ######################### scatter smooth ##############################
