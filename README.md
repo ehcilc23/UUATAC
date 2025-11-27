@@ -1,4 +1,4 @@
-# NvwaCE
+# NvwaCE: Nvwa cis-regulatory element
 
 This repository contains code for predicting regulatory effects of human genome variants from sequence with NvwaCE models and training new sequence-based regulatory model with any chromatin accessibility profile.
 
@@ -21,7 +21,7 @@ Take Mouse(Female) as an example to run a standard model training procedures.
 3. **Whole genome predicting**  (Run `bash run.sh` in the folder: `scripts/ResNextATAC/6_predict_whole_genome/human_genome/`)
    - Scan the sliding windows in the human genome using the pre-trained model
 
----
+
 
 ## Experimental Environment  
 
@@ -31,4 +31,14 @@ Take Mouse(Female) as an example to run a standard model training procedures.
   - torch==2.4.0+cu121
 - **Training Resources:**  NVIDIA A100 Tensor Core GPUs (80GB VRAM) with multi-GPU configurations is recommended for distributed training paradigms.
 
----
+
+
+## Citation
+If you use NvwaCE in your research, please cite our paper:
+
+Modeling the vertebrate regulatory sequence landscape by UUATAC-seq and deep learning. Cell (2025). https://doi.org/10.1016/j.cell.2025.06.020
+
+
+
+## Contact
+For questions or support, please open an issue or contact wuhanyu@zju.edu.cn.
